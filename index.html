@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="محاكي Akl للـ Product Owner — تمارين وقوالب حلقات LinkedIn الأسبوعية.">
+<meta property="og:title" content="Akl PO Playbook">
+<meta property="og:description" content="أنت الـ Product Owner لتطبيق توصيل طعام في السعودية. التمارين والقوالب لكل حلقة.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Akl PO Playbook</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@500;600;700&display=swap">
+<style>
+/* Layout: one reading column, like a PO's working notebook. A document-control header, then the world of Akl, then the exercise as a stack of support tickets with a live tally. */
+:root {
+  --bg: #F3F5F9;
+  --surface: #FFFFFF;
+  --sunk: #E9EDF4;
+  --line: #D6DCE7;
+  --fg: #132036;
+  --muted: #586379;
+  --accent: #A86F00;
+  --accent-fill: #F5B521;
+  --accent-tint: #FDF1D6;
+  --pay: #4C43D6; --pay-tint: #ECEBFD;
+  --dlv: #0B857A; --dlv-tint: #E1F4F1;
+  --bug: #C8364F; --bug-tint: #FCE8EC;
+  --ux:  #C25A12; --ux-tint:  #FCEBDD;
+  --font-display: "Readex Pro", "IBM Plex Sans Arabic", "Noto Kufi Arabic", Tahoma, sans-serif;
+  --font-body: "IBM Plex Sans Arabic", "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1320; --surface: #141C2C; --sunk: #1B2538; --line: #2A3650;
+    --fg: #E7ECF5; --muted: #9AA5BC;
+    --accent: #F2B744; --accent-fill: #F2B744; --accent-tint: #2E2612;
+    --pay: #9C96FA; --pay-tint: #23224A;
+    --dlv: #47C8BA; --dlv-tint: #10302E;
+    --bug: #F2849A; --bug-tint: #3A1C25;
+    --ux:  #F39A5B; --ux-tint:  #3A2414;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1320; --surface: #141C2C; --sunk: #1B2538; --line: #2A3650;
+  --fg: #E7ECF5; --muted: #9AA5BC;
+  --accent: #F2B744; --accent-fill: #F2B744; --accent-tint: #2E2612;
+  --pay: #9C96FA; --pay-tint: #23224A;
+  --dlv: #47C8BA; --dlv-tint: #10302E;
+  --bug: #F2849A; --bug-tint: #3A1C25;
+  --ux:  #F39A5B; --ux-tint:  #3A2414;
+  color-scheme: dark;
+}
+
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.75; }
+.page {
+  max-width: 760px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px;
+  display: flex; flex-direction: column; gap: 44px;
+}
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.35; }
+h1 { font-size: clamp(2rem, 7vw, 2.75rem); font-weight: 700; }
+h2 { font-size: 1.55rem; font-weight: 600; }
+h3 { font-size: 1.12rem; font-weight: 600; }
+p { margin: 0; }
+.en { font-family: var(--font-body); direction: ltr; unicode-bidi: isolate; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
+.muted { color: var(--muted); }
+section { display: flex; flex-direction: column; gap: 16px; }
+.eyebrow { font-size: .82rem; font-weight: 600; letter-spacing: .02em; color: var(--muted); }
+
+/* Header: document control block */
+.control { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.stamp {
+  font-family: var(--font-mono); font-size: .8rem; font-weight: 500; direction: ltr;
+  border: 1.5px solid var(--accent); color: var(--accent); border-radius: 6px; padding: 2px 10px;
+}
+.tag { font-size: .82rem; font-weight: 600; background: var(--sunk); color: var(--muted); border-radius: 6px; padding: 3px 10px; }
+.lede { font-size: 1.08rem; max-width: 60ch; }
+header { display: flex; flex-direction: column; gap: 14px; }
+
+/* New this week */
+.new {
+  display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; align-items: start;
+  background: var(--accent-tint); border: 1px solid var(--accent); border-radius: var(--r); padding: 14px 16px;
+}
+.new .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent-fill); margin-top: 9px; grid-row: span 2; }
+.new strong { font-weight: 600; }
+.new a { color: var(--fg); font-weight: 600; text-underline-offset: 4px; text-decoration-color: var(--accent); }
+
+/* Steps */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; counter-reset: s; }
+.steps li { counter-increment: s; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.steps li::before { content: counter(s); font-family: var(--font-mono); font-size: .8rem; color: var(--accent); font-weight: 500; }
+.steps b { font-weight: 600; }
+.steps span { font-size: .92rem; color: var(--muted); }
+@media (max-width: 620px) { .steps { grid-template-columns: 1fr; } }
+
+/* Dashboard */
+.dash { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.metric { background: var(--surface); padding: 14px 16px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.metric .k { font-size: .85rem; color: var(--muted); }
+.metric .v { font-family: var(--font-mono); font-size: 1.45rem; font-weight: 500; direction: ltr; text-align: right; unicode-bidi: isolate; }
+.metric .d { font-size: .82rem; }
+.metric .bad { color: var(--bug); font-weight: 600; }
+@media (max-width: 620px) { .dash { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.model { font-size: .95rem; color: var(--muted); max-width: 62ch; }
+
+/* Cast */
+.cast { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.person { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; min-width: 0; }
+.av { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; background: var(--sunk); color: var(--fg); }
+.person .who { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; }
+.person .who b { font-weight: 600; }
+.person .who span { font-size: .8rem; color: var(--muted); }
+.person p { font-size: .92rem; color: var(--muted); }
+@media (max-width: 620px) { .cast { grid-template-columns: 1fr; } }
+
+/* Inbox */
+.inbox { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); overflow: hidden; }
+.msg { padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+.msg + .msg { border-top: 1px solid var(--line); }
+.msg .from { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.msg .from b { font-weight: 600; }
+.msg .from .ch { font-size: .78rem; color: var(--muted); background: var(--sunk); border-radius: 4px; padding: 0 6px; }
+.msg .subj { font-weight: 600; font-size: .95rem; }
+.msg p { color: var(--fg); font-size: .95rem; }
+.msg.ltr { direction: ltr; text-align: left; }
+.msg.ltr .ch { font-family: var(--font-body); }
+
+.mission { border-inline-start: 4px solid var(--accent-fill); padding: 4px 16px; display: flex; flex-direction: column; gap: 6px; }
+.mission ul { margin: 0; padding-inline-start: 20px; }
+
+/* Exercise */
+.ex-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; }
+.progress { font-family: var(--font-mono); font-size: .85rem; color: var(--muted); direction: ltr; }
+.progress b { color: var(--fg); font-weight: 500; }
+.legend-cats { display: flex; flex-wrap: wrap; gap: 6px; }
+.tickets { display: flex; flex-direction: column; gap: 10px; }
+.ticket { margin: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ticket legend { padding: 0; float: right; width: 100%; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.ticket legend .mono { font-size: .82rem; color: var(--muted); }
+.ticket legend b { font-weight: 600; font-size: .95rem; }
+.ticket .chosen { margin-inline-start: auto; }
+.ticket p.txt { clear: both; font-size: 1rem; }
+.choices { display: flex; flex-wrap: wrap; gap: 6px; }
+.choices input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.choices label {
+  cursor: pointer; font-size: .88rem; font-weight: 500; border: 1px solid var(--line); border-radius: 999px;
+  padding: 4px 12px; color: var(--muted); background: var(--bg); transition: background-color .15s, color .15s, border-color .15s;
+}
+.choices label:hover { border-color: var(--muted); color: var(--fg); }
+.choices input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
+.choices input:checked + label { font-weight: 600; }
+.c-pay input:checked + label, .chip.c-pay { background: var(--pay-tint); color: var(--pay); border-color: var(--pay); }
+.c-dlv input:checked + label, .chip.c-dlv { background: var(--dlv-tint); color: var(--dlv); border-color: var(--dlv); }
+.c-bug input:checked + label, .chip.c-bug { background: var(--bug-tint); color: var(--bug); border-color: var(--bug); }
+.c-ux  input:checked + label, .chip.c-ux  { background: var(--ux-tint);  color: var(--ux);  border-color: var(--ux); }
+.chip { font-size: .78rem; font-weight: 600; border: 1px solid; border-radius: 999px; padding: 1px 10px; }
+.choices span { display: contents; }
+
+/* Tally */
+.tally { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.bars { display: flex; flex-direction: column; gap: 10px; }
+.bar { display: grid; grid-template-columns: 7.5em 1fr 5.5em; gap: 10px; align-items: center; font-size: .9rem; }
+.track { height: 12px; background: var(--sunk); border-radius: 6px; overflow: hidden; }
+.fill { height: 100%; width: 0; border-radius: 6px; transition: width .35s ease; }
+.fill.c-pay { background: var(--pay); } .fill.c-dlv { background: var(--dlv); } .fill.c-bug { background: var(--bug); } .fill.c-ux { background: var(--ux); }
+.bar .n { font-family: var(--font-mono); font-size: .85rem; direction: ltr; text-align: left; color: var(--muted); }
+.top3 { margin: 0; padding-inline-start: 22px; }
+.top3:empty { display: none; }
+.empty { font-size: .92rem; color: var(--muted); }
+.urgent { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 14px; }
+.urgent label { font-weight: 600; }
+select {
+  font: inherit; font-size: .95rem; color: var(--fg); background: var(--bg); border: 1px solid var(--line);
+  border-radius: 8px; padding: 8px 10px; max-width: 100%;
+}
+select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.done { background: var(--dlv-tint); color: var(--fg); border-radius: 8px; padding: 10px 14px; font-size: .95rem; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+button.ghost { font: inherit; font-size: .88rem; color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+button.ghost:hover { color: var(--fg); border-color: var(--muted); }
+.confirm { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: .9rem; }
+button.danger { font: inherit; font-size: .88rem; color: var(--surface); background: var(--bug); border: 0; border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+
+/* Locked */
+.locked { border: 1px dashed var(--line); border-radius: var(--r); padding: 14px 16px; display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; color: var(--muted); }
+.locked svg { margin-top: 5px; }
+.locked b { color: var(--fg); font-weight: 600; }
+
+/* Coming next */
+.next { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.next li { display: grid; grid-template-columns: 4.2em 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); align-items: baseline; }
+.next li:last-child { border-bottom: 1px solid var(--line); }
+.next .ver { font-family: var(--font-mono); font-size: .85rem; color: var(--muted); direction: ltr; text-align: right; }
+.next .what { display: flex; flex-direction: column; }
+.next .what b { font-weight: 600; }
+.next .what span { font-size: .88rem; color: var(--muted); }
+.next li.major .ver { color: var(--accent); }
+
+/* Log */
+.log { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; font-size: .95rem; }
+.log dt { font-family: var(--font-mono); font-size: .85rem; color: var(--accent); direction: ltr; }
+.log dd { margin: 0; }
+
+footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-direction: column; gap: 6px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="page" dir="rtl" lang="ar">
+
+  <header>
+    <div class="control">
+      <span class="stamp">v1.0</span>
+      <span class="tag">الموسم الأول</span>
+      <span class="tag"><span class="en">Sprint 0</span> · مرحباً بك في الفوضى</span>
+    </div>
+    <h1>دليل الـ <span class="en">PO</span> في <span class="en">Akl</span></h1>
+    <p class="lede">من اليوم أنت الـ <span class="en">Product Owner</span> لتطبيق Akl، تطبيق توصيل طعام في السعودية. كل حلقة على LinkedIn تضيف هنا تمريناً أو قالباً جديداً، وتقدّمك محفوظ في متصفحك.</p>
+  </header>
+
+  <div class="new" role="note">
+    <span class="dot" aria-hidden="true"></span>
+    <strong>جديد في هذا الإصدار: تمرين تصنيف 15 تذكرة دعم</strong>
+    <span>صنّف التذاكر قبل يوم الأحد 8 نوفمبر. <a href="#tickets">ابدأ التمرين</a></span>
+  </div>
+
+  <section aria-labelledby="how">
+    <h2 id="how">كيف تستخدم هذا الدليل</h2>
+    <ol class="steps">
+      <li><b>اقرأ الحلقة</b><span>على LinkedIn كل أحد وثلاثاء وخميس.</span></li>
+      <li><b>نفّذ التمرين هنا</b><span>إجاباتك تبقى في هذا المتصفح حتى تعود.</span></li>
+      <li><b>انتظر الكشف</b><span>الإجابة النموذجية وقرار الـ <span class="en">PO</span> تُنشر في الحلقة التالية.</span></li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="akl">
+    <h2 id="akl">Akl اليوم</h2>
+    <p class="model">Akl منصة توصيل بثلاثة أطراف: العميل الذي يطلب، والمطعم الذي يجهّز، والكابتن الذي يوصل. الشركة تربح عمولة من كل طلب ورسوم توصيل، لذلك كل طلب ضائع هو إيراد ضائع.</p>
+    <div class="dash" role="list" aria-label="لوحة الأرقام في Sprint 0">
+      <div class="metric" role="listitem"><span class="k">الطلبات اليومية</span><span class="v">8,500</span><span class="d bad">−5% عن الشهر الماضي</span></div>
+      <div class="metric" role="listitem"><span class="k">ترك السلة</span><span class="v">35%</span><span class="d bad">+3 نقاط</span></div>
+      <div class="metric" role="listitem"><span class="k">متوسط التوصيل</span><span class="v">48 min</span><span class="d muted">الوعد للعميل: 30 دقيقة</span></div>
+      <div class="metric" role="listitem"><span class="k">تذاكر الدعم يومياً</span><span class="v">180</span><span class="d bad">+20%</span></div>
+      <div class="metric" role="listitem"><span class="k">مغادرة العملاء شهرياً</span><span class="v">8%</span><span class="d muted">Churn</span></div>
+      <div class="metric" role="listitem"><span class="k">NPS</span><span class="v">32</span><span class="d muted">متوسط القطاع: 45</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="team">
+    <h2 id="team">فريقك</h2>
+    <div class="cast">
+      <div class="person"><span class="av" aria-hidden="true">أ</span><div><div class="who"><b>أحمد الراشد</b><span class="en">CEO</span></div><p>يريد برنامج ولاء قبل نهاية <span class="en">Q2</span>، ويريد خطتك خلال أسبوع.</p></div></div>
+      <div class="person"><span class="av" aria-hidden="true">ي</span><div><div class="who"><b>ياسر</b><span class="en">VP Sales</span></div><p>شريك كبير يهدد بالمغادرة لأن طلباته تختفي. كل طلب منه «عاجل».</p></div></div>
+      <div class="person"><span class="av" aria-hidden="true">ر</span><div><div class="who"><b>ريم</b><span class="en">Support Lead</span></div><p>فريقها يغرق في 5,400 تذكرة شهرياً، وعندها أفضل صورة عن ألم العملاء.</p></div></div>
+      <div class="person"><span class="av" aria-hidden="true">خ</span><div><div class="who"><b>خالد</b><span class="en">Tech Lead</span></div><p>عملي ومتشكك قليلاً. يحترم الأرقام ويرفض المواعيد غير الواقعية.</p></div></div>
+      <div class="person"><span class="av" aria-hidden="true">ن</span><div><div class="who"><b>نور</b><span class="en">Designer</span></div><p>عندها 15 طلب تصميم بلا أولوية. شغلها نظيف لكنها تنسى الحالات الطرفية.</p></div></div>
+      <div class="person"><span class="av" aria-hidden="true">ع</span><div><div class="who"><b>عمر</b><span class="en">Backend Developer</span></div><p>هادئ وكفء، لكنه يرفع المشاكل متأخراً. يحتاج مواصفات واضحة.</p></div></div>
+      <div class="person"><span class="av" aria-hidden="true">س</span><div><div class="who"><b>سارة</b><span class="en">QA Engineer</span></div><p>تجد كل شيء. ستصبح أفضل صديقة لك، حتى لو أزعجتك بالحالات الطرفية.</p></div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="inbox">
+    <h2 id="inbox">صندوق الوارد في يومك الأول</h2>
+    <p class="model">مثل أي شركة سعودية حقيقية، العمل هنا بلغتين: الإيميلات الرسمية وفريق الـ <span class="en">engineering</span> بالإنجليزي، والعملاء والشركاء غالباً بالعربي. وهذا جزء من التمرين.</p>
+    <div class="inbox">
+      <div class="msg ltr" lang="en">
+        <div class="from"><b>Ahmed Al-Rashid · CEO</b><span class="ch">Email</span></div>
+        <span class="subj">Welcome to Akl! 🚀</span>
+        <p>Our last PO left 2 months ago. Things are chaotic. ~8,500 daily orders, declining. First week deliverables: our biggest problems, what to fix first, and your 30-day plan.</p>
+      </div>
+      <div class="msg">
+        <div class="from"><b>ياسر · VP Sales</b><span class="ch">بريد</span></div>
+        <span class="subj">عاجل — <span class="en">Shawarma Palace</span> بيهددون يتركونا</span>
+        <p>ثالث أكبر شريك عندنا، والطلبات «تضيع» في النظام من 3 أسابيع. الحساب يجيب 200 ألف ريال بالشهر، وصاحب المطعم قال إذا ما انحلت قبل نهاية الشهر بينقلون لـ <span class="en">HungerStation</span>.</p>
+      </div>
+      <div class="msg ltr" lang="en">
+        <div class="from"><b>Reem · Support Lead</b><span class="ch">Email</span></div>
+        <span class="subj">Support ticket summary — last 30 days</span>
+        <p>Total: 5,400 tickets (avg 180/day, up 20%). Payment failures are the biggest category. Sample of 15 tickets attached.</p>
+      </div>
+      <div class="msg ltr" lang="en">
+        <div class="from"><b>Khalid · Tech Lead</b><span class="ch">#engineering</span></div>
+        <p>Welcome! Fair warning — the backlog hasn't been groomed in 2 months. 20 items, no priorities. Good luck 😅</p>
+      </div>
+      <div class="msg">
+        <div class="from"><b>أحمد الراشد</b><span class="ch">بريد</span></div>
+        <span class="subj">شي نسيت أقوله — برنامج الولاء</span>
+        <p>وعدت المستثمرين ببرنامج ولاء قبل نهاية <span class="en">Q2</span>. يعني عندنا 3 شهور. ابدأ فكر فيه.</p>
+      </div>
+    </div>
+    <div class="mission">
+      <h3>مهمتك في <span class="en">Sprint 0</span></h3>
+      <ul>
+        <li>اقرأ كل شيء قبل أن تقرر أي شيء.</li>
+        <li>صنّف تذاكر الدعم الـ 15 واحسب كل فئة.</li>
+        <li>حدّد أكبر 3 مشاكل، والتذكرة التي تعالجها أولاً.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="tickets" aria-labelledby="ex1">
+    <div class="ex-head">
+      <div>
+        <span class="eyebrow">تمرين 0.1</span>
+        <h2 id="ex1">صنّف 15 تذكرة دعم</h2>
+      </div>
+      <span class="progress" aria-live="polite"><b id="doneCount">0</b> / 15</span>
+    </div>
+    <p class="muted">اقرأ كل تذكرة واختر فئتها: الدفع، التوصيل، عطل في التطبيق، أو تجربة الاستخدام. نتيجتك تظهر تحت التذاكر مباشرة.</p>
+    <div class="tickets" id="ticketList"></div>
+
+    <div class="tally" aria-labelledby="tallyTitle">
+      <div class="row">
+        <h3 id="tallyTitle">نتيجتك</h3>
+        <div id="resetArea"><button type="button" class="ghost" id="resetBtn">ابدأ من جديد</button></div>
+      </div>
+      <div class="bars" id="bars"></div>
+      <p class="empty" id="emptyNote">صنّف أول تذكرة لتظهر هنا أكبر المشاكل حسب تصنيفك.</p>
+      <ol class="top3" id="top3" aria-label="أكبر 3 مشاكل حسب تصنيفك"></ol>
+      <div class="urgent">
+        <label for="urgentPick">أي تذكرة تعالجها أولاً؟</label>
+        <select id="urgentPick"><option value="">اختر تذكرة</option></select>
+        <span class="muted" style="font-size:.88rem">فكّر في المال والثقة، لا في عدد التذاكر فقط.</span>
+      </div>
+      <p class="done" id="doneNote" hidden>أنهيت التصنيف. احتفظ بنتيجتك وقارنها بالإجابة النموذجية يوم الأحد 8 نوفمبر.</p>
+    </div>
+
+    <div class="locked">
+      <svg width="16" height="18" viewBox="0 0 16 18" aria-hidden="true"><rect x="1.5" y="7.5" width="13" height="9.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7.5V5a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      <div><b>الإجابة النموذجية</b> تُفتح في الإصدار <span class="mono">v1.1</span> يوم الأحد 8 نوفمبر، مع ما أخطأ فيه الذكاء الاصطناعي عندما صنّف التذاكر نفسها.</div>
+    </div>
+  </section>
+
+  <section aria-labelledby="coming">
+    <h2 id="coming">ما القادم في الموسم الأول</h2>
+    <ul class="next">
+      <li><span class="ver">v1.1</span><span class="what"><b>بنّاء الـ <span class="en">Problem Statement</span> وأمر التحليل بالذكاء الاصطناعي</b><span>الأحد 8 نوفمبر</span></span></li>
+      <li><span class="ver">v1.2</span><span class="what"><b>القرار الأول: الولاء أم الدفع؟ دافع عن اختيارك</b><span>الثلاثاء 10 نوفمبر</span></span></li>
+      <li><span class="ver">v1.3</span><span class="what"><b>تنظيف الـ <span class="en">backlog</span> وخطة أول 30 يوماً</b><span>الخميس 12 نوفمبر</span></span></li>
+      <li><span class="ver">v1.4</span><span class="what"><b>تشريح الـ <span class="en">User Story</span> وقالب جاهز</b><span>الأحد 15 نوفمبر</span></span></li>
+      <li><span class="ver">v1.5</span><span class="what"><b>كتابة الـ <span class="en">Story</span> مع الذكاء الاصطناعي وقائمة مراجعة</b><span>الثلاثاء 17 نوفمبر</span></span></li>
+      <li><span class="ver">v1.6</span><span class="what"><b>حاسبة <span class="en">RICE</span> ومخطط سعة الـ <span class="en">sprint</span></b><span>الخميس 19 نوفمبر</span></span></li>
+      <li><span class="ver">v1.7</span><span class="what"><b>سجل القرارات ورسالة الأزمة</b><span>الثلاثاء 24 نوفمبر</span></span></li>
+      <li><span class="ver">v1.8</span><span class="what"><b>متتبع الأثر قبل وبعد، وقالب الـ <span class="en">Retro</span></b><span>الخميس 26 نوفمبر</span></span></li>
+      <li><span class="ver">v1.9</span><span class="what"><b>مراجعة التصميم بإطار <span class="en">SURE</span></b><span>الأحد 29 نوفمبر</span></span></li>
+      <li class="major"><span class="ver">v2.0</span><span class="what"><b>نهاية الموسم الأول: ملخص عملك والتسجيل للموسم الثاني</b><span>الخميس 3 ديسمبر</span></span></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="log">
+    <h2 id="log">سجل الإصدارات</h2>
+    <dl class="log">
+      <dt>v1.0</dt>
+      <dd>الأحد 1 نوفمبر 2026: الإطلاق. عالم Akl، الفريق، صندوق الوارد، وتمرين تصنيف التذاكر.</dd>
+    </dl>
+  </section>
+
+  <footer>
+    <p>Akl شركة خيالية لأغراض التعلم، وكل الشخصيات والأرقام من المحاكاة. إذا ذكرت هذا العمل في سيرتك الذاتية فاذكر أنه محاكاة.</p>
+    <p>محاكي Product Owner بالممارسة · حاتم غازي</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var CATS = [
+    { id: 'pay', label: 'الدفع' },
+    { id: 'dlv', label: 'التوصيل' },
+    { id: 'bug', label: 'عطل في التطبيق' },
+    { id: 'ux',  label: 'تجربة الاستخدام' }
+  ];
+  var TICKETS = [
+    { id: 'T-1847', who: 'سارة م.',   txt: 'جربت أدفع بـ Apple Pay وما زبط، واضطريت أدخل بيانات البطاقة من جديد. مزعج.' },
+    { id: 'T-1848', who: 'محمد ك.',   txt: 'قالوا 30 دقيقة ووصل بعد ساعة! ولا تحديث، وكلمت الدعم وانتظرت 20 دقيقة.' },
+    { id: 'T-1849', who: 'فاطمة ع.',  txt: 'ضفت أغراض من مطعمين والسلة انمسحت بدون أي تنبيه.' },
+    { id: 'T-1850', who: 'علي ر.',    txt: 'انخصم مني 89 ريال والطلب مكتوب «فشل». وين فلوسي؟' },
+    { id: 'T-1851', who: 'لمى س.',    txt: 'المندوب اتصل يسألني عن الطريق. ما عندكم خريطة في التطبيق؟' },
+    { id: 'T-1852', who: 'حسن ف.',    txt: 'ما فيه STC Pay؟ الكل يستخدمه! اضطريت أنزّل تطبيق ثاني.' },
+    { id: 'T-1853', who: 'نورة ك.',   txt: 'App crashes every time I open the cart. iPhone 12, latest iOS.' },
+    { id: 'T-1854', who: 'خالد م.',   txt: 'جاني طلب شخص ثاني من Shawarma Palace. ثاني مرة هالشهر.' },
+    { id: 'T-1855', who: 'أمل د.',    txt: 'حفظت بطاقتي الأسبوع اللي فات واليوم اختفت. دخلتها من جديد.' },
+    { id: 'T-1856', who: 'يوسف ت.',   txt: 'الدفع يعلّق ويطلع انتهت المهلة. جربت 4 مرات والنت تمام.' },
+    { id: 'T-1857', who: 'سلمى ح.',   txt: 'قالوا 25 دقيقة وصار لي 55 دقيقة. لا تحديث ولا تتبع.' },
+    { id: 'T-1858', who: 'فيصل ن.',   txt: 'حطيت كود الخصم وما صار شي. لا رسالة خطأ ولا خصم.' },
+    { id: 'T-1859', who: 'دانة و.',   txt: 'Can\'t pay with my Mada card? It\'s the most common debit card in Saudi.' },
+    { id: 'T-1860', who: 'طارق ب.',   txt: 'Food arrived cold. 50 minutes for a restaurant 2 km away.' },
+    { id: 'T-1861', who: 'هدى ج.',    txt: 'ما أقدر أنزل وأشوف باقي المطاعم، القائمة توقف بعد 8.' }
+  ];
+  var KEY = 'akl-playbook-s1';
+  var state = { cats: {}, urgent: '' };
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var s = JSON.parse(raw);
+        if (s && typeof s === 'object') {
+          state.cats = s.cats && typeof s.cats === 'object' ? s.cats : {};
+          state.urgent = typeof s.urgent === 'string' ? s.urgent : '';
+        }
+      }
+    } catch (e) {}
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+  function catById(id) { for (var i = 0; i < CATS.length; i++) if (CATS[i].id === id) return CATS[i]; return null; }
+
+  load();
+  var list = document.getElementById('ticketList');
+  var chosenEls = {};
+
+  TICKETS.forEach(function (t) {
+    var key = t.id.replace('-', '').toLowerCase();
+    var fs = document.createElement('fieldset');
+    fs.className = 'ticket';
+    var lg = document.createElement('legend');
+    var idEl = document.createElement('span'); idEl.className = 'mono'; idEl.textContent = t.id;
+    var who = document.createElement('b'); who.textContent = t.who;
+    var chosen = document.createElement('span'); chosen.className = 'chosen';
+    chosenEls[t.id] = chosen;
+    lg.appendChild(idEl); lg.appendChild(who); lg.appendChild(chosen);
+    var p = document.createElement('p'); p.className = 'txt'; p.textContent = t.txt;
+    var ch = document.createElement('div'); ch.className = 'choices';
+    CATS.forEach(function (c) {
+      var wrap = document.createElement('span'); wrap.className = 'c-' + c.id;
+      var inp = document.createElement('input');
+      inp.type = 'radio'; inp.name = 'cat-' + key; inp.id = key + '-' + c.id; inp.value = c.id;
+      if (state.cats[t.id] === c.id) inp.checked = true;
+      inp.addEventListener('change', function () { state.cats[t.id] = c.id; save(); update(); });
+      var lb = document.createElement('label'); lb.htmlFor = inp.id; lb.textContent = c.label;
+      wrap.appendChild(inp); wrap.appendChild(lb); ch.appendChild(wrap);
+    });
+    fs.appendChild(lg); fs.appendChild(p); fs.appendChild(ch);
+    list.appendChild(fs);
+  });
+
+  var bars = document.getElementById('bars');
+  var fills = {}, nums = {};
+  CATS.forEach(function (c) {
+    var row = document.createElement('div'); row.className = 'bar';
+    var l = document.createElement('span'); l.textContent = c.label;
+    var tr = document.createElement('div'); tr.className = 'track';
+    var f = document.createElement('div'); f.className = 'fill c-' + c.id; tr.appendChild(f);
+    var n = document.createElement('span'); n.className = 'n';
+    row.appendChild(l); row.appendChild(tr); row.appendChild(n); bars.appendChild(row);
+    fills[c.id] = f; nums[c.id] = n;
+  });
+
+  var sel = document.getElementById('urgentPick');
+  TICKETS.forEach(function (t) {
+    var o = document.createElement('option'); o.value = t.id;
+    o.textContent = t.id + ' · ' + t.txt.slice(0, 38) + (t.txt.length > 38 ? '…' : '');
+    sel.appendChild(o);
+  });
+  sel.value = state.urgent;
+  sel.addEventListener('change', function () { state.urgent = sel.value; save(); });
+
+  function update() {
+    var counts = { pay: 0, dlv: 0, bug: 0, ux: 0 }, done = 0;
+    TICKETS.forEach(function (t) {
+      var c = state.cats[t.id];
+      var el = chosenEls[t.id];
+      el.textContent = '';
+      if (c && counts.hasOwnProperty(c)) {
+        counts[c]++; done++;
+        var chip = document.createElement('span'); chip.className = 'chip c-' + c; chip.textContent = catById(c).label;
+        el.appendChild(chip);
+      }
+    });
+    document.getElementById('doneCount').textContent = done;
+    CATS.forEach(function (c) {
+      var pct = done ? Math.round(counts[c.id] / done * 100) : 0;
+      fills[c.id].style.width = (counts[c.id] / 15 * 100) + '%';
+      nums[c.id].textContent = counts[c.id] + ' · ' + pct + '%';
+    });
+    document.getElementById('emptyNote').hidden = done > 0;
+    var top = document.getElementById('top3');
+    top.textContent = '';
+    if (done > 0) {
+      CATS.slice().sort(function (a, b) { return counts[b.id] - counts[a.id]; })
+        .filter(function (c) { return counts[c.id] > 0; }).slice(0, 3)
+        .forEach(function (c) {
+          var li = document.createElement('li');
+          li.textContent = c.label + ': ' + counts[c.id] + ' من ' + done + ' تذكرة';
+          top.appendChild(li);
+        });
+    }
+    document.getElementById('doneNote').hidden = done < 15;
+  }
+
+  var area = document.getElementById('resetArea');
+  function showReset() {
+    area.textContent = '';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'ghost'; b.id = 'resetBtn'; b.textContent = 'ابدأ من جديد';
+    b.addEventListener('click', askReset); area.appendChild(b);
+  }
+  function askReset() {
+    area.textContent = '';
+    var box = document.createElement('div'); box.className = 'confirm';
+    var t = document.createElement('span'); t.textContent = 'مسح كل إجاباتك؟';
+    var yes = document.createElement('button'); yes.type = 'button'; yes.className = 'danger'; yes.textContent = 'امسح';
+    var no = document.createElement('button'); no.type = 'button'; no.className = 'ghost'; no.textContent = 'إلغاء';
+    yes.addEventListener('click', function () {
+      state = { cats: {}, urgent: '' }; save();
+      Array.prototype.forEach.call(document.querySelectorAll('.choices input'), function (i) { i.checked = false; });
+      sel.value = ''; update(); showReset();
+    });
+    no.addEventListener('click', showReset);
+    box.appendChild(t); box.appendChild(yes); box.appendChild(no); area.appendChild(box);
+    yes.focus();
+  }
+  document.getElementById('resetBtn').addEventListener('click', askReset);
+
+  update();
+})();
+</script>
+
+</body>
+</html>
