@@ -215,6 +215,7 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
+<script data-goatcounter="https://hatem-ghazy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 
@@ -499,6 +500,7 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
         });
     }
     document.getElementById('doneNote').hidden = done < 15;
+    if (done === 15) { try { if (!localStorage.getItem('akl-gc-ex01') && window.goatcounter && window.goatcounter.count) { window.goatcounter.count({ path: 'exercise-0.1-complete', title: 'Exercise 0.1 complete', event: true }); localStorage.setItem('akl-gc-ex01', '1'); } } catch (e) {} }
   }
 
   var area = document.getElementById('resetArea');
