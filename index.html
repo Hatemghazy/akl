@@ -215,6 +215,7 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
+<script>window.goatcounter = { path: function () { return location.pathname } };</script>
 <script data-goatcounter="https://hatem-ghazy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -402,6 +403,15 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
   var KEY = 'akl-playbook-s1';
   var state = { cats: {}, urgent: '' };
 
+  function gcEvent(path, title, onceKey) {
+    try {
+      if (onceKey && localStorage.getItem(onceKey)) return;
+      if (window.goatcounter && window.goatcounter.count) {
+        window.goatcounter.count({ path: path, title: title, event: true });
+        if (onceKey) localStorage.setItem(onceKey, '1');
+      }
+    } catch (e) {}
+  }
   function load() {
     try {
       var raw = localStorage.getItem(KEY);
@@ -440,7 +450,7 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
       var inp = document.createElement('input');
       inp.type = 'radio'; inp.name = 'cat-' + key; inp.id = key + '-' + c.id; inp.value = c.id;
       if (state.cats[t.id] === c.id) inp.checked = true;
-      inp.addEventListener('change', function () { state.cats[t.id] = c.id; save(); update(); });
+      inp.addEventListener('change', function () { state.cats[t.id] = c.id; save(); update(); gcEvent('exercise-0.1-start', 'Exercise 0.1 started', 'akl-gc-ex01-start'); });
       var lb = document.createElement('label'); lb.htmlFor = inp.id; lb.textContent = c.label;
       wrap.appendChild(inp); wrap.appendChild(lb); ch.appendChild(wrap);
     });
@@ -467,7 +477,7 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
     sel.appendChild(o);
   });
   sel.value = state.urgent;
-  sel.addEventListener('change', function () { state.urgent = sel.value; save(); });
+  sel.addEventListener('change', function () { state.urgent = sel.value; save(); if (sel.value) gcEvent('exercise-0.1-urgent', 'Exercise 0.1 urgent ticket picked', 'akl-gc-ex01-urgent'); });
 
   function update() {
     var counts = { pay: 0, dlv: 0, bug: 0, ux: 0 }, done = 0;
@@ -516,7 +526,7 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
     var yes = document.createElement('button'); yes.type = 'button'; yes.className = 'danger'; yes.textContent = 'امسح';
     var no = document.createElement('button'); no.type = 'button'; no.className = 'ghost'; no.textContent = 'إلغاء';
     yes.addEventListener('click', function () {
-      state = { cats: {}, urgent: '' }; save();
+      state = { cats: {}, urgent: '' }; save(); gcEvent('exercise-0.1-reset', 'Exercise 0.1 reset');
       Array.prototype.forEach.call(document.querySelectorAll('.choices input'), function (i) { i.checked = false; });
       sel.value = ''; update(); showReset();
     });
