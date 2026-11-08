@@ -213,6 +213,25 @@ button.danger { font: inherit; font-size: .88rem; color: var(--surface); backgro
 
 footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-direction: column; gap: 6px; }
 
+/* v1.1: answer + builder */
+.ans { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: .88rem; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 8px; }
+.ans .ok { color: var(--dlv); font-weight: 600; }
+.ans .no { color: var(--bug); font-weight: 600; }
+.reveal { background: var(--surface); border: 1px solid var(--accent); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.reveal h3 { color: var(--fg); }
+.score { font-family: var(--font-mono); font-size: 1.6rem; direction: ltr; text-align: right; }
+.callout { border-inline-start: 4px solid var(--accent-fill); padding: 4px 14px; }
+.builder { display: grid; gap: 10px; }
+.builder label { display: flex; flex-direction: column; gap: 4px; font-size: .9rem; font-weight: 600; }
+.builder input { font: inherit; font-size: .95rem; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.builder input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.ps-out { background: var(--sunk); border-radius: var(--r); padding: 14px 16px; font-size: 1rem; line-height: 1.9; }
+.ps-out b { color: var(--accent); }
+pre.prompt { white-space: pre-wrap; font-family: var(--font-body); font-size: .9rem; background: var(--sunk); border-radius: var(--r); padding: 14px 16px; margin: 0; max-height: 320px; overflow: auto; }
+button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff; background: var(--fg); border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer; align-self: flex-start; }
+:root[data-theme="dark"] button.primary { color: var(--bg); }
+.next li.done .ver { color: var(--dlv); }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 <script>window.goatcounter = { path: function () { return location.pathname } };</script>
@@ -224,7 +243,7 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
 
   <header>
     <div class="control">
-      <span class="stamp">v1.0</span>
+      <span class="stamp">v1.1</span>
       <span class="tag">الموسم الأول</span>
       <span class="tag"><span class="en">Sprint 0</span> · مرحباً بك في الفوضى</span>
     </div>
@@ -234,8 +253,8 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
 
   <div class="new" role="note">
     <span class="dot" aria-hidden="true"></span>
-    <strong>جديد في هذا الإصدار: تمرين تصنيف 15 تذكرة دعم</strong>
-    <span>صنّف التذاكر قبل يوم الأحد 8 نوفمبر. <a href="#tickets">ابدأ التمرين</a></span>
+    <strong>جديد في v1.1: الإجابة النموذجية، وبنّاء الـ <span class="en">Problem Statement</span>، وأمر التحليل بالذكاء الاصطناعي</strong>
+    <span>قارن تصنيفك بالإجابة، ثم حوّل الأرقام لمشكلة واضحة. <a href="#answer">شوف الإجابة</a></span>
   </div>
 
   <section aria-labelledby="how">
@@ -336,19 +355,51 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
         <select id="urgentPick"><option value="">اختر تذكرة</option></select>
         <span class="muted" style="font-size:.88rem">فكّر في المال والثقة، لا في عدد التذاكر فقط.</span>
       </div>
-      <p class="done" id="doneNote" hidden>أنهيت التصنيف. احتفظ بنتيجتك وقارنها بالإجابة النموذجية يوم الأحد 8 نوفمبر.</p>
+      <p class="done" id="doneNote" hidden>أنهيت التصنيف. قارن نتيجتك بالإجابة النموذجية تحت.</p>
     </div>
 
-    <div class="locked">
-      <svg width="16" height="18" viewBox="0 0 16 18" aria-hidden="true"><rect x="1.5" y="7.5" width="13" height="9.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7.5V5a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-      <div><b>الإجابة النموذجية تظهر هنا يوم الأحد 8 نوفمبر.</b> ومعها مقارنة بين تصنيفك وتصنيف الذكاء الاصطناعي لنفس التذاكر.</div>
+    <div class="reveal" id="answer">
+      <span class="eyebrow">الإجابة النموذجية · v1.1</span>
+      <h3>كيف صنّفنا الـ 15 تذكرة</h3>
+      <p>الدفع 6 تذاكر (40%)، التوصيل 5 (33%)، عطل في التطبيق 2، وتجربة الاستخدام 2. الإجابة النموذجية لكل تذكرة تظهر تحتها في القائمة فوق.</p>
+      <div><span class="muted" style="font-size:.9rem">تطابقك مع الإجابة النموذجية</span><div class="score" id="matchScore">0 / 15</div></div>
+      <div class="callout"><b>أخطر تذكرة: <span class="mono">T-1850</span>.</b> عميل انخصم منه 89 ريال والطلب فشل. واحدة فقط، لكنها مال العميل وثقته، وأخطر من خمس شكاوى عن التأخير.</div>
+      <div class="callout"><b>وما لا تقوله الأرقام:</b> <span class="mono">T-1854</span> (طلب خاطئ من <span class="en">Shawarma Palace</span>) جزء من قصة إيميل ياسر: شريك بـ 200 ألف ريال شهرياً يفكر في المغادرة. الذكاء الاصطناعي يرى التذاكر فقط. الـ <span class="en">PO</span> هو من يربط التذكرة بالإيميل.</div>
     </div>
+  </section>
+
+  <section id="ps" aria-labelledby="ex2">
+    <div>
+      <span class="eyebrow">تمرين 0.2</span>
+      <h2 id="ex2">حوّل الأرقام إلى <span class="en">Problem Statement</span></h2>
+    </div>
+    <p class="muted">املأ الخانات الخمس. الصيغة تُبنى أمامك، ويمكنك نسخها. المثال المكتوب من Akl، غيّره بمشكلتك.</p>
+    <div class="builder">
+      <label>المستخدم<input id="psUser" value="المستخدمون الذين يكملون طلباتهم في Akl"></label>
+      <label>يحتاج إلى<input id="psNeed" value="الدفع بطريقتهم المفضلة بشكل موثوق"></label>
+      <label>لأن<input id="psWhy" value="STC Pay ومدى هما الأكثر استخداماً في السعودية"></label>
+      <label>لكن حالياً<input id="psBut" value="التطبيق يدعم البطاقات فقط، ويفشل أحياناً بعد خصم المبلغ"></label>
+      <label>والنتيجة (برقم)<input id="psImpact" value="40% من تذاكر الدعم عن الدفع، و35% يتركون السلة"></label>
+    </div>
+    <p class="ps-out" id="psOut"></p>
+    <button type="button" class="primary" id="psCopy">انسخ الـ Problem Statement</button>
+    <p class="muted" style="font-size:.88rem">اختبار سريع: هل المستخدم محدد؟ هل فيه سبب وعائق؟ هل فيه رقم؟ بدون رقم، هو رأي وليس مشكلة.</p>
+  </section>
+
+  <section id="ai" aria-labelledby="ex3">
+    <div>
+      <span class="eyebrow">جرّب بنفسك</span>
+      <h2 id="ex3">أمر تحليل التذاكر بالذكاء الاصطناعي</h2>
+    </div>
+    <p class="muted">انسخ الأمر والصقه في أي أداة ذكاء اصطناعي، ثم قارن نتيجته بالإجابة النموذجية. لاحظ: هل ربط <span class="mono">T-1854</span> بقصة الشريك؟</p>
+    <pre class="prompt" id="aiPrompt"></pre>
+    <button type="button" class="primary" id="aiCopy">انسخ الأمر</button>
   </section>
 
   <section aria-labelledby="coming">
     <h2 id="coming">ما القادم في الموسم الأول</h2>
     <ul class="next">
-      <li><span class="ver">v1.1</span><span class="what"><b>بنّاء الـ <span class="en">Problem Statement</span> وأمر التحليل بالذكاء الاصطناعي</b><span>الأحد 8 نوفمبر</span></span></li>
+      <li class="done"><span class="ver">v1.1</span><span class="what"><b>بنّاء الـ <span class="en">Problem Statement</span> وأمر التحليل بالذكاء الاصطناعي</b><span>صدر الأحد 8 نوفمبر ✓</span></span></li>
       <li><span class="ver">v1.2</span><span class="what"><b>القرار الأول: الولاء أم الدفع؟ دافع عن اختيارك</b><span>الثلاثاء 10 نوفمبر</span></span></li>
       <li><span class="ver">v1.3</span><span class="what"><b>تنظيف الـ <span class="en">backlog</span> وخطة أول 30 يوماً</b><span>الخميس 12 نوفمبر</span></span></li>
       <li><span class="ver">v1.4</span><span class="what"><b>تشريح الـ <span class="en">User Story</span> وقالب جاهز</b><span>الأحد 15 نوفمبر</span></span></li>
@@ -364,6 +415,8 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
   <section aria-labelledby="log">
     <h2 id="log">سجل الإصدارات</h2>
     <dl class="log">
+      <dt>v1.1</dt>
+      <dd>الأحد 8 نوفمبر 2026: الإجابة النموذجية لتمرين التذاكر، بنّاء الـ <span class="en">Problem Statement</span>، وأمر التحليل بالذكاء الاصطناعي.</dd>
       <dt>v1.0</dt>
       <dd>الأحد 1 نوفمبر 2026: الإطلاق. عالم Akl، الفريق، صندوق الوارد، وتمرين تصنيف التذاكر.</dd>
     </dl>
@@ -400,6 +453,8 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
     { id: 'T-1860', who: 'طارق ب.',   txt: 'Food arrived cold. 50 minutes for a restaurant 2 km away.' },
     { id: 'T-1861', who: 'هدى ج.',    txt: 'ما أقدر أنزل وأشوف باقي المطاعم، القائمة توقف بعد 8.' }
   ];
+  var ANSWER = { 'T-1847':'pay','T-1848':'dlv','T-1849':'bug','T-1850':'pay','T-1851':'dlv','T-1852':'pay','T-1853':'bug','T-1854':'dlv','T-1855':'pay','T-1856':'pay','T-1857':'dlv','T-1858':'ux','T-1859':'pay','T-1860':'dlv','T-1861':'ux' };
+  var ansEls = {};
   var KEY = 'akl-playbook-s1';
   var state = { cats: {}, urgent: '' };
 
@@ -454,7 +509,12 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
       var lb = document.createElement('label'); lb.htmlFor = inp.id; lb.textContent = c.label;
       wrap.appendChild(inp); wrap.appendChild(lb); ch.appendChild(wrap);
     });
-    fs.appendChild(lg); fs.appendChild(p); fs.appendChild(ch);
+    var an = document.createElement('div'); an.className = 'ans';
+    var al = document.createElement('span'); al.textContent = 'الإجابة النموذجية:';
+    var ac = document.createElement('span'); ac.className = 'chip c-' + ANSWER[t.id]; ac.textContent = catById(ANSWER[t.id]).label;
+    var am = document.createElement('span'); ansEls[t.id] = am;
+    an.appendChild(al); an.appendChild(ac); an.appendChild(am);
+    fs.appendChild(lg); fs.appendChild(p); fs.appendChild(ch); fs.appendChild(an);
     list.appendChild(fs);
   });
 
@@ -491,6 +551,14 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
         el.appendChild(chip);
       }
     });
+    var match = 0;
+    TICKETS.forEach(function (t) {
+      var c = state.cats[t.id], m = ansEls[t.id];
+      if (!c) { m.textContent = ''; m.className = ''; return; }
+      if (c === ANSWER[t.id]) { match++; m.textContent = '✓ تطابق'; m.className = 'ok'; }
+      else { m.textContent = '✗ اخترت ' + catById(c).label; m.className = 'no'; }
+    });
+    document.getElementById('matchScore').textContent = match + ' / 15';
     document.getElementById('doneCount').textContent = done;
     CATS.forEach(function (c) {
       var pct = done ? Math.round(counts[c.id] / done * 100) : 0;
@@ -537,6 +605,37 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
   document.getElementById('resetBtn').addEventListener('click', askReset);
 
   update();
+
+  // v1.1: Problem Statement builder
+  var PSKEY = 'akl-playbook-ps';
+  var psIds = ['psUser','psNeed','psWhy','psBut','psImpact'];
+  try { var saved = JSON.parse(localStorage.getItem(PSKEY) || 'null'); if (saved) psIds.forEach(function (id) { if (typeof saved[id] === 'string') document.getElementById(id).value = saved[id]; }); } catch (e) {}
+  var out = document.getElementById('psOut');
+  function psText() { var v = psIds.map(function (id) { return document.getElementById(id).value.trim(); });
+    return v[0] + ' يحتاجون إلى ' + v[1] + '، لأن ' + v[2] + '. لكن حالياً ' + v[3] + '. والنتيجة: ' + v[4] + '.'; }
+  function psRender() {
+    var v = psIds.map(function (id) { return document.getElementById(id).value.trim() || '…'; });
+    out.textContent = '';
+    var parts = [['', v[0]], [' يحتاجون إلى ', v[1]], ['، لأن ', v[2]], ['. لكن حالياً ', v[3]], ['. والنتيجة: ', v[4]]];
+    parts.forEach(function (pt) { out.appendChild(document.createTextNode(pt[0])); var b = document.createElement('b'); b.textContent = pt[1]; out.appendChild(b); });
+    out.appendChild(document.createTextNode('.'));
+    var o = {}; psIds.forEach(function (id) { o[id] = document.getElementById(id).value; });
+    try { localStorage.setItem(PSKEY, JSON.stringify(o)); } catch (e) {}
+  }
+  psIds.forEach(function (id) { document.getElementById(id).addEventListener('input', psRender); });
+  psRender();
+  function copy(txt, btn, label) {
+    function done() { btn.textContent = 'تم النسخ ✓'; setTimeout(function () { btn.textContent = label; }, 1800); }
+    try { navigator.clipboard.writeText(txt).then(done, function () { btn.textContent = 'انسخ يدوياً'; }); } catch (e) { btn.textContent = 'انسخ يدوياً'; }
+  }
+  var psBtn = document.getElementById('psCopy');
+  psBtn.addEventListener('click', function () { copy(psText(), psBtn, 'انسخ الـ Problem Statement'); });
+
+  // v1.1: AI prompt
+  var prompt = 'أنت محلل منتجات. دي 15 تذكرة دعم من تطبيق توصيل طعام في السعودية.\n\nالمطلوب:\n1) صنّف كل تذكرة في فئة واحدة فقط: الدفع، التوصيل، عطل في التطبيق، تجربة الاستخدام.\n2) احسب عدد التذاكر في كل فئة ونسبتها.\n3) رتّب أكبر 3 مشاكل.\n4) لو هتحل تذكرة واحدة بس أولاً، تختار أنهي؟ وليه؟\n\nالتذاكر:\n' + TICKETS.map(function (t) { return t.id + ': ' + t.txt; }).join('\n');
+  document.getElementById('aiPrompt').textContent = prompt;
+  var aiBtn = document.getElementById('aiCopy');
+  aiBtn.addEventListener('click', function () { copy(prompt, aiBtn, 'انسخ الأمر'); });
 })();
 </script>
 
