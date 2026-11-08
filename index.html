@@ -231,6 +231,16 @@ pre.prompt { white-space: pre-wrap; font-family: var(--font-body); font-size: .9
 button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff; background: var(--fg); border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer; align-self: flex-start; }
 :root[data-theme="dark"] button.primary { color: var(--bg); }
 .next li.done .ver { color: var(--dlv); }
+/* v1.1.1: progress link */
+.inapp, .restored { border-radius: var(--r); padding: 12px 16px; display: flex; flex-direction: column; gap: 4px; font-size: .92rem; }
+.inapp { background: var(--sunk); border-inline-start: 4px solid var(--bug); }
+.restored { background: var(--sunk); border-inline-start: 4px solid var(--dlv); font-weight: 600; }
+.inapp[hidden], .restored[hidden], .savebox[hidden] { display: none; }
+.savebox { display: flex; flex-direction: column; gap: 10px; }
+.savebox input { font-family: var(--font-mono); font-size: .8rem; color: var(--fg); background: var(--sunk); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; width: 100%; min-width: 0; box-sizing: border-box; }
+.saveacts { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.ghostlink, .savelink { color: var(--fg); font-weight: 600; font-size: .9rem; text-underline-offset: 4px; text-decoration-color: var(--accent); cursor: pointer; }
+.savelink { align-self: flex-start; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -243,25 +253,48 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
 
   <header>
     <div class="control">
-      <span class="stamp">v1.1</span>
+      <span class="stamp">v1.1.1</span>
       <span class="tag">الموسم الأول</span>
       <span class="tag"><span class="en">Sprint 0</span> · مرحباً بك في الفوضى</span>
     </div>
     <h1>دليل الـ <span class="en">PO</span> في <span class="en">Akl</span></h1>
-    <p class="lede">من اليوم أنت الـ <span class="en">Product Owner</span> لتطبيق Akl، تطبيق توصيل طعام في السعودية. كل حلقة على LinkedIn تضيف هنا تمريناً أو قالباً جديداً، وتقدّمك محفوظ في متصفحك.</p>
+    <p class="lede">من اليوم أنت الـ <span class="en">Product Owner</span> لتطبيق Akl، تطبيق توصيل طعام في السعودية. كل حلقة على LinkedIn تضيف هنا تمريناً أو قالباً جديداً، وتقدّمك يُحفظ تلقائياً، ويمكنك أخذه معك إلى أي جهاز عبر <a href="#save">رابط تقدّمك</a>.</p>
   </header>
 
   <div class="new" role="note">
     <span class="dot" aria-hidden="true"></span>
     <strong>جديد في v1.1: الإجابة النموذجية، وبنّاء الـ <span class="en">Problem Statement</span>، وأمر التحليل بالذكاء الاصطناعي</strong>
     <span>قارن تصنيفك بالإجابة، ثم حوّل الأرقام لمشكلة واضحة. <a href="#answer">شوف الإجابة</a></span>
+    <span>وجديد في v1.1.1: <a href="#save">احفظ تقدّمك برابط</a> وأكمل من أي جهاز.</span>
   </div>
+
+  <div class="restored" id="restoredNote" role="status" hidden>تم استرجاع تقدّمك من الرابط. أكمل من حيث توقفت.</div>
+
+  <div class="inapp" id="inappNote" role="note" hidden>
+    <b>أنت تفتح الصفحة من داخل تطبيق LinkedIn.</b>
+    <span>قد لا يُحفظ تقدّمك هنا. افتح الصفحة في المتصفح من قائمة ⋯ ثم <span class="en">Open in browser</span>، أو احفظ رابط تقدّمك قبل أن تغلق.</span>
+  </div>
+
+  <section id="save" aria-labelledby="saveh">
+    <h2 id="saveh">احفظ تقدّمك وأكمل من أي جهاز</h2>
+    <p class="muted">إجاباتك تُحفظ تلقائياً في هذا المتصفح فقط. لتكمل من جهاز آخر أو بعد مسح المتصفح، أنشئ رابطك الشخصي واحفظه عندك. الرابط يحمل إجاباتك نفسها، ولا نجمع أي بيانات شخصية.</p>
+    <button type="button" class="primary" id="saveBtn">احفظ تقدّمي</button>
+    <div class="savebox" id="saveBox" hidden>
+      <input id="saveLink" readonly dir="ltr" aria-label="رابط تقدّمك">
+      <div class="saveacts">
+        <button type="button" class="primary" id="saveCopy">انسخ الرابط</button>
+        <a class="ghostlink" id="saveWa" target="_blank" rel="noopener">أرسله لنفسي على واتساب</a>
+        <a class="ghostlink" id="saveMail">أرسله لنفسي بالإيميل</a>
+      </div>
+      <p class="muted" style="font-size:.88rem">افتح الرابط على أي جهاز وستجد إجاباتك كما تركتها. أنشئ رابطاً جديداً كلما تقدّمت، فالرابط يحفظ ما أنجزته حتى لحظة إنشائه.</p>
+    </div>
+  </section>
 
   <section aria-labelledby="how">
     <h2 id="how">كيف تستخدم هذا الدليل</h2>
     <ol class="steps">
       <li><b>اقرأ الحلقة</b><span>على LinkedIn كل أحد وثلاثاء وخميس.</span></li>
-      <li><b>نفّذ التمرين هنا</b><span>إجاباتك تبقى في هذا المتصفح حتى تعود.</span></li>
+      <li><b>نفّذ التمرين هنا</b><span>إجاباتك تُحفظ تلقائياً في هذا المتصفح. للانتقال إلى جهاز آخر استخدم «احفظ تقدّمي».</span></li>
       <li><b>قارن بالإجابة</b><span>الإجابة النموذجية وسبب القرار تنزل هنا مع الحلقة التالية.</span></li>
     </ol>
   </section>
@@ -384,6 +417,7 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
     <p class="ps-out" id="psOut"></p>
     <button type="button" class="primary" id="psCopy">انسخ الـ Problem Statement</button>
     <p class="muted" style="font-size:.88rem">اختبار سريع: هل المستخدم محدد؟ هل فيه سبب وعائق؟ هل فيه رقم؟ بدون رقم، هو رأي وليس مشكلة.</p>
+    <a class="savelink" href="#save" data-save>احفظ تقدّمي وأكمل من جهاز آخر</a>
   </section>
 
   <section id="ai" aria-labelledby="ex3">
@@ -399,6 +433,7 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
   <section aria-labelledby="coming">
     <h2 id="coming">ما القادم في الموسم الأول</h2>
     <ul class="next">
+      <li class="done"><span class="ver">v1.1.1</span><span class="what"><b>رابط التقدّم: أكمل من أي جهاز</b><span>صدر الأحد 8 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.1</span><span class="what"><b>بنّاء الـ <span class="en">Problem Statement</span> وأمر التحليل بالذكاء الاصطناعي</b><span>صدر الأحد 8 نوفمبر ✓</span></span></li>
       <li><span class="ver">v1.2</span><span class="what"><b>القرار الأول: الولاء أم الدفع؟ دافع عن اختيارك</b><span>الثلاثاء 10 نوفمبر</span></span></li>
       <li><span class="ver">v1.3</span><span class="what"><b>تنظيف الـ <span class="en">backlog</span> وخطة أول 30 يوماً</b><span>الخميس 12 نوفمبر</span></span></li>
@@ -415,6 +450,8 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
   <section aria-labelledby="log">
     <h2 id="log">سجل الإصدارات</h2>
     <dl class="log">
+      <dt>v1.1.1</dt>
+      <dd>الأحد 8 نوفمبر 2026: رابط التقدّم الشخصي لنقل إجاباتك إلى أي جهاز، وتنبيه لمن يفتح الصفحة من داخل تطبيق LinkedIn.</dd>
       <dt>v1.1</dt>
       <dd>الأحد 8 نوفمبر 2026: الإجابة النموذجية لتمرين التذاكر، بنّاء الـ <span class="en">Problem Statement</span>، وأمر التحليل بالذكاء الاصطناعي.</dd>
       <dt>v1.0</dt>
@@ -483,6 +520,29 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
   }
   function catById(id) { for (var i = 0; i < CATS.length; i++) if (CATS[i].id === id) return CATS[i]; return null; }
+
+  // v1.1.1: restore progress from a personal link (#p=...)
+  var ORDER = TICKETS.map(function (t) { return t.id; });
+  var CODE = { pay: 'p', dlv: 'd', bug: 'b', ux: 'u' };
+  function b64e(s) { return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function b64d(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return decodeURIComponent(escape(atob(s))); }
+  (function restore() {
+    var m = location.hash.match(/^#p=([A-Za-z0-9_-]+)/);
+    if (!m) return;
+    try {
+      var d = JSON.parse(b64d(m[1]));
+      if (!d || d.v !== 1) return;
+      var cats = {}, rev = { p: 'pay', d: 'dlv', b: 'bug', u: 'ux' };
+      String(d.c || '').split('').forEach(function (ch, i) { if (rev[ch] && ORDER[i]) cats[ORDER[i]] = rev[ch]; });
+      var urg = typeof d.u === 'string' && ORDER.indexOf(d.u) > -1 ? d.u : '';
+      localStorage.setItem(KEY, JSON.stringify({ cats: cats, urgent: urg }));
+      if (d.ps && typeof d.ps === 'object') { var o = {}; ['psUser','psNeed','psWhy','psBut','psImpact'].forEach(function (k, i) { if (typeof d.ps[i] === 'string') o[k] = d.ps[i].slice(0, 400); }); localStorage.setItem('akl-playbook-ps', JSON.stringify(o)); }
+      document.getElementById('restoredNote').hidden = false;
+      try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'progress-link-restored', title: 'Progress link restored', event: true }); } catch (e) {}
+    } catch (e) {}
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  })();
+  try { if (/LinkedInApp/i.test(navigator.userAgent)) document.getElementById('inappNote').hidden = false; } catch (e) {}
 
   load();
   var list = document.getElementById('ticketList');
@@ -624,6 +684,30 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
   }
   psIds.forEach(function (id) { document.getElementById(id).addEventListener('input', psRender); });
   psRender();
+
+  // v1.1.1: build the personal progress link
+  function progressLink() {
+    var c = ORDER.map(function (id) { return CODE[state.cats[id]] || '-'; }).join('');
+    var ps = psIds.map(function (id) { return document.getElementById(id).value; });
+    var data = { v: 1, c: c, u: state.urgent || '', ps: ps };
+    return location.origin + location.pathname + '#p=' + b64e(JSON.stringify(data));
+  }
+  var saveBox = document.getElementById('saveBox'), saveLink = document.getElementById('saveLink');
+  var countedSave = false;
+  function makeLink() {
+    var url = progressLink();
+    saveLink.value = url;
+    var msg = 'رابط تقدّمي في دليل Akl:\n' + url;
+    document.getElementById('saveWa').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
+    document.getElementById('saveMail').href = 'mailto:?subject=' + encodeURIComponent('رابط تقدّمي في دليل Akl') + '&body=' + encodeURIComponent(url);
+    saveBox.hidden = false;
+    if (!countedSave) { countedSave = true; try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'progress-link-created', title: 'Progress link created', event: true }); } catch (e) {} }
+  }
+  document.getElementById('saveBtn').addEventListener('click', makeLink);
+  [].forEach.call(document.querySelectorAll('[data-save]'), function (a) { a.addEventListener('click', function () { makeLink(); }); });
+  var saveCopy = document.getElementById('saveCopy');
+  saveCopy.addEventListener('click', function () { makeLink(); saveLink.select(); copy(saveLink.value, saveCopy, 'انسخ الرابط'); });
+  saveLink.addEventListener('focus', function () { saveLink.select(); });
   function copy(txt, btn, label) {
     function done() { btn.textContent = 'تم النسخ ✓'; setTimeout(function () { btn.textContent = label; }, 1800); }
     try { navigator.clipboard.writeText(txt).then(done, function () { btn.textContent = 'انسخ يدوياً'; }); } catch (e) { btn.textContent = 'انسخ يدوياً'; }
