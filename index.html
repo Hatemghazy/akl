@@ -224,6 +224,7 @@ footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--lin
 .builder { display: grid; gap: 10px; }
 .builder label { display: flex; flex-direction: column; gap: 4px; font-size: .9rem; font-weight: 600; }
 .builder input { font: inherit; font-size: .95rem; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.builder textarea { font-weight: 400; }
 .builder input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .ps-out { background: var(--sunk); border-radius: var(--r); padding: 14px 16px; font-size: 1rem; line-height: 1.9; }
 .ps-out b { color: var(--accent); }
@@ -242,6 +243,23 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
 .ghostlink, .savelink { color: var(--fg); font-weight: 600; font-size: .9rem; text-underline-offset: 4px; text-decoration-color: var(--accent); cursor: pointer; }
 .savelink { align-self: flex-start; }
 
+/* v1.2-v1.4 */
+.field { display: flex; flex-direction: column; gap: 6px; font-size: .92rem; font-weight: 600; }
+textarea { font: inherit; font-size: .95rem; font-weight: 400; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; resize: vertical; }
+textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.c-gen input:checked + label { background: var(--accent-tint); color: var(--fg); border-color: var(--accent); }
+.checks { display: flex; flex-direction: column; gap: 8px; }
+.checks label { display: flex; gap: 10px; align-items: flex-start; font-size: .95rem; cursor: pointer; }
+.checks input { margin-top: 7px; accent-color: var(--accent); }
+.anat { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); overflow: hidden; text-align: left; }
+.anat .part { display: grid; grid-template-columns: 4.5em 1fr; gap: 12px; padding: 12px 16px; align-items: baseline; }
+.anat .part + .part { border-top: 1px solid var(--line); }
+.anat .pk { font-family: var(--font-mono); font-size: .8rem; color: var(--accent); }
+.anat b { font-weight: 600; }
+.parts-ar { margin: 0; padding-inline-start: 20px; display: flex; flex-direction: column; gap: 6px; }
+.builder[dir="ltr"] label { text-align: left; }
+.reveal[hidden] { display: none; }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 <script>window.goatcounter = { path: function () { return location.pathname } };</script>
@@ -253,9 +271,9 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
 
   <header>
     <div class="control">
-      <span class="stamp">v1.1.1</span>
+      <span class="stamp">v1.4</span>
       <span class="tag">الموسم الأول</span>
-      <span class="tag"><span class="en">Sprint 0</span> · مرحباً بك في الفوضى</span>
+      <span class="tag"><span class="en">Sprint 1</span> · المنصة المشتعلة</span>
     </div>
     <h1>دليل الـ <span class="en">PO</span> في <span class="en">Akl</span></h1>
     <p class="lede">من اليوم أنت الـ <span class="en">Product Owner</span> لتطبيق Akl، تطبيق توصيل طعام في السعودية. كل حلقة على LinkedIn تضيف هنا تمريناً أو قالباً جديداً، وتقدّمك يُحفظ تلقائياً، ويمكنك أخذه معك إلى أي جهاز عبر <a href="#save">رابط تقدّمك</a>.</p>
@@ -263,9 +281,9 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
 
   <div class="new" role="note">
     <span class="dot" aria-hidden="true"></span>
-    <strong>جديد في v1.1: الإجابة النموذجية، وبنّاء الـ <span class="en">Problem Statement</span>، وأمر التحليل بالذكاء الاصطناعي</strong>
-    <span>قارن تصنيفك بالإجابة، ثم حوّل الأرقام لمشكلة واضحة. <a href="#answer">شوف الإجابة</a></span>
-    <span>وجديد في v1.1.1: <a href="#save">احفظ تقدّمك برابط</a> وأكمل من أي جهاز.</span>
+    <strong>جديد في v1.4: تشريح الـ <span class="en">User Story</span> وقالب جاهز تنسخه لـ Jira</strong>
+    <span>من <span class="en">fix payments</span> إلى <span class="en">story</span> يفهمها الفريق كله. <a href="#story">ابدأ التمرين</a></span>
+    <span>ولو فاتتك: <a href="#decision">v1.2 القرار الأول</a>، و<a href="#ceo">v1.3 رسالة الـ <span class="en">CEO</span> وتنظيف الـ <span class="en">backlog</span></a>.</span>
   </div>
 
   <div class="restored" id="restoredNote" role="status" hidden>تم استرجاع تقدّمك من الرابط. أكمل من حيث توقفت.</div>
@@ -293,7 +311,7 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
   <section aria-labelledby="how">
     <h2 id="how">كيف تستخدم هذا الدليل</h2>
     <ol class="steps">
-      <li><b>اقرأ الحلقة</b><span>على LinkedIn كل أحد وثلاثاء وخميس.</span></li>
+      <li><b>اقرأ الحلقة</b><span>على LinkedIn كل أحد وأربعاء.</span></li>
       <li><b>نفّذ التمرين هنا</b><span>إجاباتك تُحفظ تلقائياً في هذا المتصفح. للانتقال إلى جهاز آخر استخدم «احفظ تقدّمي».</span></li>
       <li><b>قارن بالإجابة</b><span>الإجابة النموذجية وسبب القرار تنزل هنا مع الحلقة التالية.</span></li>
     </ol>
@@ -430,26 +448,132 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
     <button type="button" class="primary" id="aiCopy">انسخ الأمر</button>
   </section>
 
+  <section id="decision" aria-labelledby="ex4">
+    <div>
+      <span class="eyebrow">تمرين 0.3 · v1.2</span>
+      <h2 id="ex4">القرار الأول: الولاء أم الدفع؟</h2>
+    </div>
+    <p class="muted">الـ <span class="en">CEO</span> يريد بدء برنامج الولاء الآن، لأنه وعد المستثمرين به قبل نهاية <span class="en">Q2</span>. وأرقامك تقول إن 35% يتركون السلة عند الدفع، أي حوالي 2,975 طلباً يضيع كل يوم من 8,500. اختر، ثم اكتب دفاعك قبل أن ترى إجابتنا.</p>
+    <div class="choices c-gen" role="radiogroup" aria-label="اختيارك">
+      <span><input type="radio" name="dec0" id="dec0a" value="a" data-keep><label for="dec0a">أ) نبدأ برنامج الولاء</label></span>
+      <span><input type="radio" name="dec0" id="dec0b" value="b" data-keep><label for="dec0b">ب) نصلح الدفع أولاً</label></span>
+      <span><input type="radio" name="dec0" id="dec0c" value="c" data-keep><label for="dec0c">ج) الاثنين بالتوازي</label></span>
+    </div>
+    <label class="field">دافع عن اختيارك في 3 سطور
+      <textarea id="dec0why" rows="4" data-keep placeholder="ما الرقم الذي تستند إليه؟ ماذا نخسر لو اخترنا غيره؟ وماذا ستقول للـ CEO؟"></textarea>
+    </label>
+    <button type="button" class="primary" data-reveal="dec0ans">اعرض إجابتنا</button>
+    <div class="reveal" id="dec0ans" hidden>
+      <span class="eyebrow">إجابتنا</span>
+      <h3>ب) نصلح الدفع أولاً</h3>
+      <p>برنامج الولاء يكافئ من يكمل طلبه ويعود. لكن ثلث العملاء لا يكملون الطلب أصلاً، فالولاء الآن يعني نقاطاً لعملاء لا يستطيعون الدفع.</p>
+      <div class="callout"><b>ولماذا ليس «الاثنين بالتوازي»؟</b> عندنا <span class="en">Backend developer</span> واحد. التوازي يقسم وقته نصفين، فيتأخر الإصلاح ويخرج الولاء ناقصاً.</div>
+      <div class="callout"><b>ولا تقل «لا» للـ <span class="en">CEO</span>.</b> قل «نعم، بعد أن نوقف النزيف»، وأعطه موعداً لطلبه. القالب في التمرين التالي.</div>
+    </div>
+  </section>
+
+  <section id="ceo" aria-labelledby="ex5">
+    <div>
+      <span class="eyebrow">تمرين 0.4 · v1.3</span>
+      <h2 id="ex5">قل «لأ» للـ <span class="en">CEO</span> من غير ما تخسره</h2>
+    </div>
+    <p class="muted">صيغة «نعم، لكن أولاً» في 3 أسطر: وافق على هدفه، وضّح تكلفة البدء بطلبه بالأرقام، ثم أعطِ طلبه موعداً. المثال من Akl، غيّره برسالتك.</p>
+    <div class="builder">
+      <label>1) وافق على هدفه<textarea id="ceoGoal" data-keep rows="2">أتفق معك أن برنامج الولاء مهم للمستثمرين ولنمو الطلبات</textarea></label>
+      <label>2) التكلفة بالأرقام<textarea id="ceoCost" data-keep rows="2">لكن 35% من العملاء يتركون السلة عند الدفع، وهذا حوالي 2,975 طلباً يضيع كل يوم</textarea></label>
+      <label>3) موعد لطلبه<textarea id="ceoDate" data-keep rows="2">أقترح إصلاح الدفع في الـ sprint القادم، ونبدأ تصميم الولاء مباشرة بعده، ويكون جاهزاً قبل نهاية Q2</textarea></label>
+    </div>
+    <p class="ps-out" id="ceoOut"></p>
+    <button type="button" class="primary" id="ceoCopy">انسخ الرسالة</button>
+
+    <div>
+      <h3>تنظيف الـ <span class="en">backlog</span></h3>
+      <p class="muted">هذه 8 عناصر من الـ <span class="en">backlog</span> الذي ورثته. قرّر لكل عنصر: نبقيه، نعيد كتابته، ندمجه مع غيره، أو نحذفه.</p>
+    </div>
+    <div class="tickets" id="blList"></div>
+    <button type="button" class="primary" data-reveal="blAns">قارن بإجابتنا</button>
+    <div class="reveal" id="blAns" hidden>
+      <span class="eyebrow">إجابتنا</span>
+      <div><span class="muted" style="font-size:.9rem">تطابقك مع إجابتنا</span><div class="score" id="blScore">0 / 8</div></div>
+      <p>الإجابة لكل عنصر تظهر تحته في القائمة. القاعدة: كل عنصر يبقى لازم يكون واضحاً، ومرتبطاً بمشكلة حقيقية، وغير مكرر.</p>
+    </div>
+  </section>
+
+  <section id="story" aria-labelledby="ex6">
+    <div>
+      <span class="eyebrow">تمرين 1.1 · v1.4</span>
+      <h2 id="ex6">تشريح الـ <span class="en">User Story</span></h2>
+    </div>
+    <p class="muted">أسوأ <span class="en">story</span> في الـ <span class="en">backlog</span> كان عنوانها كلمتين: <span class="en">fix payments</span>. الـ <span class="en">Tech Lead</span> رجّعها لأن لا أحد يعرف منها ماذا نبني، ولا متى نعتبرها انتهت.</p>
+
+    <div class="tally">
+      <h3>كم علامة من الخمسة في الـ <span class="en">backlog</span> عندكم؟</h3>
+      <div class="checks">
+        <label><input type="checkbox" id="sig1" data-keep> <span>عناوين من كلمتين من غير أي سياق</span></label>
+        <label><input type="checkbox" id="sig2" data-keep> <span>مفيش <span class="en">acceptance criteria</span>، فكل <span class="en">developer</span> يفهمها على مزاجه</span></label>
+        <label><input type="checkbox" id="sig3" data-keep> <span>نفس المشكلة مكتوبة 3 مرات بـ 3 صيغ</span></label>
+        <label><input type="checkbox" id="sig4" data-keep> <span>عناصر عمرها 6 شهور لم يلمسها أحد</span></label>
+        <label><input type="checkbox" id="sig5" data-keep> <span>كل شيء <span class="en">High priority</span>، يعني لا شيء <span class="en">High</span> فعلاً</span></label>
+      </div>
+      <p class="muted" id="sigNote" style="font-size:.92rem"></p>
+    </div>
+
+    <h3>نفس الـ <span class="en">story</span> بعد ما اتكتبت صح</h3>
+    <div class="anat" dir="ltr" lang="en">
+      <div class="part"><span class="pk">Title</span><b>US-PAY-001: Pay with STC Pay at checkout</b></div>
+      <div class="part"><span class="pk">Story</span><p><b>As a</b> customer, <b>I want</b> to pay with STC Pay at checkout, <b>so that</b> I finish my order without typing card details.</p></div>
+      <div class="part"><span class="pk">AC 1</span><p><b>Given</b> I'm on the checkout page with a valid cart<br><b>When</b> I choose STC Pay and confirm<br><b>Then</b> I'm sent to the STC Pay app, and after approval I land on the order confirmation page</p></div>
+      <div class="part"><span class="pk">AC 2</span><p><b>Given</b> the payment fails after STC Pay approval<br><b>When</b> no confirmation comes back within 60 seconds<br><b>Then</b> the order is not placed, and I see whether I was charged</p></div>
+    </div>
+    <ul class="parts-ar">
+      <li><b>العنوان:</b> رقم يميّزها، وجملة تقول ماذا سنبني.</li>
+      <li><b>الـ <span class="en">Story</span>:</b> من المستخدم؟ ماذا يريد؟ ولماذا؟ الـ <span class="en">so that</span> هي ما يحمي الفريق من بناء الشيء الخطأ.</li>
+      <li><b>الـ <span class="en">Acceptance Criteria</span>:</b> متى نعتبرها انتهت. اكتب حالة النجاح، ثم حالة واحدة على الأقل لما يحصل خطأ.</li>
+    </ul>
+
+    <h3>قالبك الجاهز</h3>
+    <p class="muted">املأ الخانات واكتب الـ <span class="en">story</span> بالإنجليزي كما في Jira. انسخها والصقها مباشرة.</p>
+    <div class="builder" dir="ltr">
+      <label>ID<input id="usId" data-keep value="US-PAY-001"></label>
+      <label>Title<input id="usTitle" data-keep value="Pay with STC Pay at checkout"></label>
+      <label>As a<input id="usRole" data-keep value="customer"></label>
+      <label>I want<input id="usWant" data-keep value="to pay with STC Pay at checkout"></label>
+      <label>So that<input id="usWhy" data-keep value="I finish my order without typing card details"></label>
+      <label>Given<input id="usGiven" data-keep value="I'm on the checkout page with a valid cart"></label>
+      <label>When<input id="usWhen" data-keep value="I choose STC Pay and confirm"></label>
+      <label>Then<input id="usThen" data-keep value="I land on the order confirmation page"></label>
+    </div>
+    <pre class="prompt" id="usOut" dir="ltr"></pre>
+    <button type="button" class="primary" id="usCopy">انسخ الـ User Story</button>
+    <p class="muted" style="font-size:.88rem">اختبار سريع: هل يفهمها الـ <span class="en">developer</span> والـ <span class="en">QA</span> بنفس الطريقة من غير ما يسألوك؟ لو لا، ناقصها <span class="en">acceptance criteria</span>.</p>
+    <a class="savelink" href="#save" data-save>احفظ تقدّمي وأكمل من جهاز آخر</a>
+  </section>
+
   <section aria-labelledby="coming">
     <h2 id="coming">ما القادم في الموسم الأول</h2>
     <ul class="next">
+      <li class="done"><span class="ver">v1.4</span><span class="what"><b>تشريح الـ <span class="en">User Story</span> وقالب جاهز</b><span>صدر الأربعاء 18 نوفمبر ✓</span></span></li>
+      <li class="done"><span class="ver">v1.3</span><span class="what"><b>رسالة الـ <span class="en">CEO</span> وتنظيف الـ <span class="en">backlog</span></b><span>صدر الأربعاء 18 نوفمبر ✓</span></span></li>
+      <li class="done"><span class="ver">v1.2</span><span class="what"><b>القرار الأول: الولاء أم الدفع؟ دافع عن اختيارك</b><span>صدر الأربعاء 18 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.1.1</span><span class="what"><b>رابط التقدّم: أكمل من أي جهاز</b><span>صدر الأحد 8 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.1</span><span class="what"><b>بنّاء الـ <span class="en">Problem Statement</span> وأمر التحليل بالذكاء الاصطناعي</b><span>صدر الأحد 8 نوفمبر ✓</span></span></li>
-      <li><span class="ver">v1.2</span><span class="what"><b>القرار الأول: الولاء أم الدفع؟ دافع عن اختيارك</b><span>الثلاثاء 10 نوفمبر</span></span></li>
-      <li><span class="ver">v1.3</span><span class="what"><b>تنظيف الـ <span class="en">backlog</span> وخطة أول 30 يوماً</b><span>الخميس 12 نوفمبر</span></span></li>
-      <li><span class="ver">v1.4</span><span class="what"><b>تشريح الـ <span class="en">User Story</span> وقالب جاهز</b><span>الأحد 15 نوفمبر</span></span></li>
-      <li><span class="ver">v1.5</span><span class="what"><b>كتابة الـ <span class="en">Story</span> مع الذكاء الاصطناعي وقائمة مراجعة</b><span>الثلاثاء 17 نوفمبر</span></span></li>
-      <li><span class="ver">v1.6</span><span class="what"><b>حاسبة <span class="en">RICE</span> ومخطط سعة الـ <span class="en">sprint</span></b><span>الخميس 19 نوفمبر</span></span></li>
-      <li><span class="ver">v1.7</span><span class="what"><b>سجل القرارات ورسالة الأزمة</b><span>الثلاثاء 24 نوفمبر</span></span></li>
-      <li><span class="ver">v1.8</span><span class="what"><b>متتبع الأثر قبل وبعد، وقالب الـ <span class="en">Retro</span></b><span>الخميس 26 نوفمبر</span></span></li>
-      <li><span class="ver">v1.9</span><span class="what"><b>مراجعة التصميم بإطار <span class="en">SURE</span></b><span>الأحد 29 نوفمبر</span></span></li>
-      <li class="major"><span class="ver">v2.0</span><span class="what"><b>نهاية الموسم الأول: ملخص عملك والتسجيل للموسم الثاني</b><span>الخميس 3 ديسمبر</span></span></li>
+      <li><span class="ver">v1.5</span><span class="what"><b>كتابة الـ <span class="en">Story</span> مع الذكاء الاصطناعي وقائمة مراجعة</b><span>الأحد 22 نوفمبر</span></span></li>
+      <li><span class="ver">v1.6</span><span class="what"><b>حاسبة <span class="en">RICE</span> ومخطط سعة الـ <span class="en">sprint</span></b><span>الأربعاء 25 نوفمبر</span></span></li>
+      <li><span class="ver">v1.7</span><span class="what"><b>سجل القرارات، رسالة الأزمة، متتبع الأثر وقالب الـ <span class="en">Retro</span></b><span>الأحد 29 نوفمبر</span></span></li>
+      <li><span class="ver">v1.8</span><span class="what"><b>مراجعة التصميم بإطار <span class="en">SURE</span></b><span>الأربعاء 2 ديسمبر</span></span></li>
+      <li class="major"><span class="ver">v2.0</span><span class="what"><b>نهاية الموسم الأول: ملخص عملك والتسجيل للموسم الثاني</b><span>الأحد 6 ديسمبر</span></span></li>
     </ul>
   </section>
 
   <section aria-labelledby="log">
     <h2 id="log">سجل الإصدارات</h2>
     <dl class="log">
+      <dt>v1.4</dt>
+      <dd>الأربعاء 18 نوفمبر 2026: تشريح الـ <span class="en">User Story</span>، علامات الـ <span class="en">backlog</span> المكركب، وقالب جاهز بالإنجليزي.</dd>
+      <dt>v1.3</dt>
+      <dd>الأربعاء 18 نوفمبر 2026: قالب رسالة «نعم، لكن أولاً» للـ <span class="en">CEO</span>، وتمرين تنظيف الـ <span class="en">backlog</span>.</dd>
+      <dt>v1.2</dt>
+      <dd>الأربعاء 18 نوفمبر 2026: القرار الأول، الولاء أم الدفع، مع خانة للدفاع عن اختيارك وإجابتنا.</dd>
       <dt>v1.1.1</dt>
       <dd>الأحد 8 نوفمبر 2026: رابط التقدّم الشخصي لنقل إجاباتك إلى أي جهاز، وتنبيه لمن يفتح الصفحة من داخل تطبيق LinkedIn.</dd>
       <dt>v1.1</dt>
@@ -537,6 +661,7 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
       var urg = typeof d.u === 'string' && ORDER.indexOf(d.u) > -1 ? d.u : '';
       localStorage.setItem(KEY, JSON.stringify({ cats: cats, urgent: urg }));
       if (d.ps && typeof d.ps === 'object') { var o = {}; ['psUser','psNeed','psWhy','psBut','psImpact'].forEach(function (k, i) { if (typeof d.ps[i] === 'string') o[k] = d.ps[i].slice(0, 400); }); localStorage.setItem('akl-playbook-ps', JSON.stringify(o)); }
+      if (d.m && typeof d.m === 'object') { var mo = {}; Object.keys(d.m).slice(0, 60).forEach(function (k) { var v = d.m[k]; if (typeof v === 'string') mo[k] = v.slice(0, 1200); else if (typeof v === 'boolean') mo[k] = v; }); localStorage.setItem('akl-playbook-more', JSON.stringify(mo)); }
       document.getElementById('restoredNote').hidden = false;
       try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'progress-link-restored', title: 'Progress link restored', event: true }); } catch (e) {}
     } catch (e) {}
@@ -689,7 +814,8 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
   function progressLink() {
     var c = ORDER.map(function (id) { return CODE[state.cats[id]] || '-'; }).join('');
     var ps = psIds.map(function (id) { return document.getElementById(id).value; });
-    var data = { v: 1, c: c, u: state.urgent || '', ps: ps };
+    var more = null; try { more = JSON.parse(localStorage.getItem('akl-playbook-more') || 'null'); } catch (e) {}
+    var data = { v: 1, c: c, u: state.urgent || '', ps: ps, m: more || undefined };
     return location.origin + location.pathname + '#p=' + b64e(JSON.stringify(data));
   }
   var saveBox = document.getElementById('saveBox'), saveLink = document.getElementById('saveLink');
@@ -721,6 +847,124 @@ button.primary { font: inherit; font-size: .9rem; font-weight: 600; color: #fff;
   var aiBtn = document.getElementById('aiCopy');
   aiBtn.addEventListener('click', function () { copy(prompt, aiBtn, 'انسخ الأمر'); });
 })();
+</script>
+<script>
+// v1.2 to v1.4: decision, CEO message, backlog cleanup, user story template
+(function () {
+  var MKEY = 'akl-playbook-more';
+  var store = {};
+  try { store = JSON.parse(localStorage.getItem(MKEY) || '{}') || {}; } catch (e) { store = {}; }
+  function persist() { try { localStorage.setItem(MKEY, JSON.stringify(store)); } catch (e) {} }
+  function once(path, title) {
+    try { var k = 'akl-gc-' + path; if (localStorage.getItem(k)) return;
+      if (window.goatcounter && window.goatcounter.count) { window.goatcounter.count({ path: path, title: title, event: true }); localStorage.setItem(k, '1'); } } catch (e) {}
+  }
+  function copy(txt, btn, label) {
+    function done() { btn.textContent = 'تم النسخ ✓'; setTimeout(function () { btn.textContent = label; }, 1800); }
+    try { navigator.clipboard.writeText(txt).then(done, function () { btn.textContent = 'انسخ يدوياً'; }); } catch (e) { btn.textContent = 'انسخ يدوياً'; }
+  }
+
+  // Backlog cleanup items (built before restoring saved fields)
+  var OPTS = [ { id: 'keep', label: 'نبقيه' }, { id: 'rewrite', label: 'نعيد كتابته' }, { id: 'merge', label: 'ندمجه' }, { id: 'delete', label: 'نحذفه' } ];
+  var BL = [
+    { id: 'B-01', txt: 'fix payments', ans: 'rewrite', why: 'عنوان من كلمتين، لا مستخدم ولا معيار انتهاء.' },
+    { id: 'B-02', txt: 'Add STC Pay as a payment method', ans: 'keep', why: 'واضح ومرتبط بأكبر فئة شكاوى (الدفع 40%).' },
+    { id: 'B-03', txt: 'Payment bug', ans: 'merge', why: 'نفس مشكلة B-08 بصيغة أخرى. ندمجه فيه.' },
+    { id: 'B-04', txt: 'Dark mode (added 6 months ago, no requester)', ans: 'delete', why: 'لا أحد طلبه ولا مشكلة وراءه. لو رجع بسبب حقيقي يرجع للـ backlog.' },
+    { id: 'B-05', txt: 'Loyalty program for Q2', ans: 'keep', why: 'طلب الـ CEO. يبقى بموعد واضح بعد إصلاح الدفع.' },
+    { id: 'B-06', txt: 'Improve delivery', ans: 'rewrite', why: 'تحسين ماذا؟ الوقت؟ التتبع؟ اكتبه من التذاكر: 48 دقيقة مقابل وعد 30.' },
+    { id: 'B-07', txt: 'Shawarma Palace orders getting lost', ans: 'keep', why: 'شريك بـ 200 ألف ريال شهرياً يفكر في المغادرة.' },
+    { id: 'B-08', txt: 'Customer charged but order failed (T-1850)', ans: 'keep', why: 'مال العميل وثقته. أعلى أولوية في الـ backlog.' }
+  ];
+  var list = document.getElementById('blList'), blAnsEls = {};
+  BL.forEach(function (it) {
+    var fs = document.createElement('fieldset'); fs.className = 'ticket';
+    var lg = document.createElement('legend');
+    var m = document.createElement('span'); m.className = 'mono'; m.textContent = it.id; lg.appendChild(m);
+    var b = document.createElement('b'); b.className = 'en'; b.textContent = it.txt; lg.appendChild(b);
+    fs.appendChild(lg);
+    var ch = document.createElement('div'); ch.className = 'choices c-gen';
+    OPTS.forEach(function (o) {
+      var w = document.createElement('span');
+      var inp = document.createElement('input'); inp.type = 'radio'; inp.name = 'bl-' + it.id; inp.id = 'bl-' + it.id + '-' + o.id; inp.value = o.id; inp.setAttribute('data-keep', '');
+      var lb = document.createElement('label'); lb.htmlFor = inp.id; lb.textContent = o.label;
+      w.appendChild(inp); w.appendChild(lb); ch.appendChild(w);
+    });
+    fs.appendChild(ch);
+    var a = document.createElement('div'); a.className = 'ans'; a.hidden = true; fs.appendChild(a); blAnsEls[it.id] = a;
+    list.appendChild(fs);
+  });
+
+  // Restore and save every [data-keep] field
+  var fields = document.querySelectorAll('[data-keep]');
+  [].forEach.call(fields, function (el) {
+    var k = el.type === 'radio' ? el.name : el.id;
+    if (el.type === 'radio') { if (store[k] === el.value) el.checked = true; }
+    else if (el.type === 'checkbox') { if (store[k] === true) el.checked = true; }
+    else if (typeof store[k] === 'string') el.value = store[k];
+    var ev = (el.type === 'radio' || el.type === 'checkbox') ? 'change' : 'input';
+    el.addEventListener(ev, function () {
+      if (el.type === 'radio') { if (el.checked) store[k] = el.value; }
+      else if (el.type === 'checkbox') store[k] = el.checked;
+      else store[k] = el.value;
+      persist(); refresh();
+      if (k === 'dec0' || k === 'dec0why') once('exercise-0.3-start', 'Exercise 0.3 started');
+      if (k.indexOf('bl-') === 0) once('exercise-0.4-backlog-start', 'Exercise 0.4 backlog started');
+      if (k.indexOf('sig') === 0) once('exercise-1.1-signs', 'Exercise 1.1 signs checked');
+    });
+  });
+
+  // Reveal buttons
+  [].forEach.call(document.querySelectorAll('[data-reveal]'), function (btn) {
+    btn.addEventListener('click', function () {
+      var t = document.getElementById(btn.getAttribute('data-reveal')); t.hidden = false; btn.hidden = true;
+      store['shown-' + t.id] = true; persist(); refresh();
+      if (t.id === 'dec0ans') once('exercise-0.3-complete', 'Exercise 0.3 answer revealed');
+      if (t.id === 'blAns') once('exercise-0.4-backlog-complete', 'Exercise 0.4 backlog compared');
+    });
+    var t = document.getElementById(btn.getAttribute('data-reveal'));
+    if (store['shown-' + t.id]) { t.hidden = false; btn.hidden = true; }
+  });
+
+  var LBL = {}; OPTS.forEach(function (o) { LBL[o.id] = o.label; });
+  var ceoIds = ['ceoGoal', 'ceoCost', 'ceoDate'];
+  function ceoText() { var v = ceoIds.map(function (id) { return document.getElementById(id).value.trim(); }); return v[0] + '.\n' + v[1] + '.\n' + v[2] + '.'; }
+  var usIds = ['usId', 'usTitle', 'usRole', 'usWant', 'usWhy', 'usGiven', 'usWhen', 'usThen'];
+  function usText() {
+    var v = {}; usIds.forEach(function (id) { v[id] = document.getElementById(id).value.trim() || '…'; });
+    return v.usId + ': ' + v.usTitle + '\n\nAs a ' + v.usRole + ', I want ' + v.usWant + ', so that ' + v.usWhy + '.\n\nAcceptance criteria\nGiven ' + v.usGiven + '\nWhen ' + v.usWhen + '\nThen ' + v.usThen;
+  }
+  function refresh() {
+    // CEO message
+    var out = document.getElementById('ceoOut'); out.textContent = '';
+    ceoIds.forEach(function (id, i) { var b = document.createElement('b'); b.textContent = document.getElementById(id).value.trim() || '…'; out.appendChild(b); out.appendChild(document.createTextNode(i < 2 ? '. ' : '.')); });
+    // Backlog answers
+    var shown = !document.getElementById('blAns').hidden, match = 0, answered = 0;
+    BL.forEach(function (it) {
+      var pick = store['bl-' + it.id], el = blAnsEls[it.id];
+      if (pick) answered++;
+      if (pick === it.ans) match++;
+      el.hidden = !shown; el.textContent = '';
+      if (shown) {
+        var s1 = document.createElement('span'); s1.className = pick === it.ans ? 'ok' : (pick ? 'no' : '');
+        s1.textContent = pick === it.ans ? '✓ ' + LBL[it.ans] : 'إجابتنا: ' + LBL[it.ans];
+        var s2 = document.createElement('span'); s2.textContent = it.why;
+        el.appendChild(s1); el.appendChild(s2);
+      }
+    });
+    document.getElementById('blScore').textContent = match + ' / 8';
+    // Signs
+    var n = 0; for (var i = 1; i <= 5; i++) if (document.getElementById('sig' + i).checked) n++;
+    var note = document.getElementById('sigNote');
+    note.textContent = n === 0 ? 'علّم كل علامة موجودة عندكم.' : n <= 2 ? 'عندكم ' + n + ' من 5. ابدأ بها في الـ grooming القادم.' : 'عندكم ' + n + ' من 5. الـ backlog محتاج جلسة تنظيف قبل أي sprint جديد.';
+    // User story
+    document.getElementById('usOut').textContent = usText();
+  }
+  refresh();
+  var cb = document.getElementById('ceoCopy'); cb.addEventListener('click', function () { copy(ceoText(), cb, 'انسخ الرسالة'); once('exercise-0.4-ceo-copied', 'CEO message copied'); });
+  var ub = document.getElementById('usCopy'); ub.addEventListener('click', function () { copy(usText(), ub, 'انسخ الـ User Story'); once('exercise-1.1-story-copied', 'User story copied'); });
+})();
+
 </script>
 
 </body>
