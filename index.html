@@ -271,7 +271,7 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
 
   <header>
     <div class="control">
-      <span class="stamp">v1.4</span>
+      <span class="stamp">v1.5</span>
       <span class="tag">الموسم الأول</span>
       <span class="tag"><span class="en">Sprint 1</span> · المنصة المشتعلة</span>
     </div>
@@ -281,9 +281,9 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
 
   <div class="new" role="note">
     <span class="dot" aria-hidden="true"></span>
-    <strong>جديد في v1.4: تشريح الـ <span class="en">User Story</span> وقالب جاهز تنسخه لـ Jira</strong>
-    <span>من <span class="en">fix payments</span> إلى <span class="en">story</span> يفهمها الفريق كله. <a href="#story">ابدأ التمرين</a></span>
-    <span>ولو فاتتك: <a href="#decision">v1.2 القرار الأول</a>، و<a href="#ceo">v1.3 رسالة الـ <span class="en">CEO</span> وتنظيف الـ <span class="en">backlog</span></a>.</span>
+    <strong>جديد في v1.5: اكتب الـ <span class="en">Story</span> مع الـ <span class="en">AI</span>، وقائمة مراجعة من 10 نقاط</strong>
+    <span>الـ <span class="en">AI</span> نسي 3 حالات كانت هتوقّع الدفع. لاقيها قبل ما تشوف إجابتنا. <a href="#aistory">ابدأ التمرين</a></span>
+    <span>ولو فاتتك: <a href="#story">v1.4 تشريح الـ <span class="en">User Story</span></a>، و<a href="#ceo">v1.3 رسالة الـ <span class="en">CEO</span></a>.</span>
   </div>
 
   <div class="restored" id="restoredNote" role="status" hidden>تم استرجاع تقدّمك من الرابط. أكمل من حيث توقفت.</div>
@@ -549,15 +549,86 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
     <a class="savelink" href="#save" data-save>احفظ تقدّمي وأكمل من جهاز آخر</a>
   </section>
 
+  <section id="aistory" aria-labelledby="ex7">
+    <div>
+      <span class="eyebrow">تمرين 1.2 · v1.5</span>
+      <h2 id="ex7">اكتب الـ <span class="en">Story</span> مع الـ <span class="en">AI</span>، ثم راجعها</h2>
+    </div>
+    <p class="muted">الـ <span class="en">AI</span> كتب <span class="en">story</span> الدفع بـ <span class="en">STC Pay</span> في 10 ثوانٍ، لكنه كتب حالة النجاح فقط. هنا 4 خطوات: الأمر، المسودة وما نسيته، الـ <span class="en">edge cases</span> في قالبك، ثم قائمة مراجعة من 10 نقاط.</p>
+
+    <h3>1) الأمر</h3>
+    <p class="muted">اكتب الميزة، وانسخ الأمر لأي أداة ذكاء اصطناعي. لا تلصق أي بيانات عملاء حقيقية.</p>
+    <div class="builder">
+      <label>الميزة<input id="aiFeat" data-keep value="الدفع بـ STC Pay عند إتمام الطلب"></label>
+    </div>
+    <pre class="prompt" id="aiStoryPrompt"></pre>
+    <button type="button" class="primary" id="aiStoryCopy">انسخ الأمر</button>
+
+    <h3>2) مسودة الـ <span class="en">AI</span>: ماذا نسي؟</h3>
+    <p class="muted">هذه المسودة كما طلعت من أمر قصير بدون الأسئلة الثلاثة. شكلها مظبوط. اكتب الحالات الناقصة قبل أن ترى إجابتنا.</p>
+    <div class="anat" dir="ltr" lang="en">
+      <div class="part"><span class="pk">Title</span><b>US-PAY-001: Pay with STC Pay</b></div>
+      <div class="part"><span class="pk">Story</span><p><b>As a</b> customer, <b>I want</b> to pay with STC Pay, <b>so that</b> checkout is faster.</p></div>
+      <div class="part"><span class="pk">AC 1</span><p><b>Given</b> I'm on the checkout page<br><b>When</b> I select STC Pay and confirm<br><b>Then</b> I'm redirected to STC Pay, and my order is confirmed after payment</p></div>
+    </div>
+    <label class="field">ما الحالات التي نسيها؟
+      <textarea id="aiMissed" rows="4" data-keep placeholder="فكّر في 3 أسئلة: لو المدخلات غلط؟ لو السيستم وقع؟ لو المستخدم عمل حاجة غريبة؟"></textarea>
+    </label>
+    <button type="button" class="primary" data-reveal="aiMissedAns">اعرض إجابتنا</button>
+    <div class="reveal" id="aiMissedAns" hidden>
+      <span class="eyebrow">إجابتنا</span>
+      <div class="callout"><b>1) لو المدخلات غلط؟</b> العميل أصلاً مش منزّل تطبيق <span class="en">STC Pay</span>. الـ <span class="en">redirect</span> يفشل، والعميل واقف في صفحة الدفع.</div>
+      <div class="callout"><b>2) لو السيستم وقع؟</b> العميل وافق في <span class="en">STC Pay</span>، والـ <span class="en">callback</span> اتأخر. الفلوس اتخصمت والأوردر لسه <span class="en">pending</span>، وده بالظبط نوع التذكرة <span class="mono">T-1850</span>.</div>
+      <div class="callout"><b>3) لو المستخدم عمل حاجة غريبة؟</b> كود خصم خلّى الأوردر بـ 0 ريال. مفيش حاجة تتدفع، فلازم خطوة الدفع تتخطى.</div>
+      <p>الـ <span class="en">AI</span> بيكتب السيناريو السعيد كويس. الـ <span class="en">PO</span> هو اللي بيسأل: إيه اللي ممكن يبوظ؟</p>
+    </div>
+
+    <h3>3) أضف الـ <span class="en">edge cases</span> لقالبك</h3>
+    <p class="muted">كل حالة <span class="en">acceptance criterion</span> لوحدها بصيغة <span class="en">Given / When / Then</span>. عدّلها لميزتك، وانسخها تحت الـ <span class="en">story</span> في Jira.</p>
+    <div class="builder" dir="ltr">
+      <label>AC 2 · Given<input id="ec1g" data-keep value="the STC Pay app isn't installed on my phone"></label>
+      <label>When<input id="ec1w" data-keep value="I select STC Pay"></label>
+      <label>Then<input id="ec1t" data-keep value="I can pay on the STC Pay web page or pick another payment method"></label>
+      <label>AC 3 · Given<input id="ec2g" data-keep value="I approved the payment in STC Pay"></label>
+      <label>When<input id="ec2w" data-keep value="no confirmation arrives within 60 seconds"></label>
+      <label>Then<input id="ec2t" data-keep value="the order stays pending, and I see whether I was charged"></label>
+      <label>AC 4 · Given<input id="ec3g" data-keep value="a promo code makes the order total 0 SAR"></label>
+      <label>When<input id="ec3w" data-keep value="I place the order"></label>
+      <label>Then<input id="ec3t" data-keep value="the payment step is skipped and the order is confirmed"></label>
+    </div>
+    <pre class="prompt" id="ecOut" dir="ltr"></pre>
+    <button type="button" class="primary" id="ecCopy">انسخ الـ Edge cases</button>
+    <p class="muted" style="font-size:.88rem">الـ 60 ثانية رقم من المحاكاة. في شغلك، اسأل الـ <span class="en">Tech Lead</span> عن المهلة الحقيقية قبل ما تكتبها.</p>
+
+    <div class="tally">
+      <h3>4) قائمة مراجعة أي مسودة من الـ <span class="en">AI</span></h3>
+      <p class="muted" style="font-size:.92rem">علّم كل نقطة موجودة في الـ <span class="en">story</span> اللي قدامك.</p>
+      <div class="checks">
+        <label><input type="checkbox" id="rv1" data-keep> <span>العنوان فيه رقم، وجملة تقول هنبني إيه</span></label>
+        <label><input type="checkbox" id="rv2" data-keep> <span>الـ <span class="en">so that</span> فيها قيمة للمستخدم، مش وصف للميزة</span></label>
+        <label><input type="checkbox" id="rv3" data-keep> <span>فيه حالة نجاح واحدة واضحة</span></label>
+        <label><input type="checkbox" id="rv4" data-keep> <span>فيه حالة للمدخلات الغلط أو الناقصة</span></label>
+        <label><input type="checkbox" id="rv5" data-keep> <span>فيه حالة لما سيستم خارجي يتأخر أو يقع</span></label>
+        <label><input type="checkbox" id="rv6" data-keep> <span>فيه حالة لتصرف غريب من المستخدم: رجوع، إلغاء، قيمة 0</span></label>
+        <label><input type="checkbox" id="rv7" data-keep> <span>كل <span class="en">Then</span> يقدر الـ <span class="en">QA</span> يختبرها بنتيجة واضحة</span></label>
+        <label><input type="checkbox" id="rv8" data-keep> <span>لو فيه فلوس: العميل هيعرف اتخصم منه ولا لأ</span></label>
+        <label><input type="checkbox" id="rv9" data-keep> <span>مفيش أرقام أو قواعد الـ <span class="en">AI</span> اخترعها (مهلة، حدود، نسب) من غير ما تتأكد منها</span></label>
+        <label><input type="checkbox" id="rv10" data-keep> <span>الـ <span class="en">developer</span> والـ <span class="en">QA</span> يفهموها بنفس الطريقة من غير ما يسألوك</span></label>
+      </div>
+      <p class="muted" id="rvNote" style="font-size:.92rem"></p>
+    </div>
+    <a class="savelink" href="#save" data-save>احفظ تقدّمي وأكمل من جهاز آخر</a>
+  </section>
+
   <section aria-labelledby="coming">
     <h2 id="coming">ما القادم في الموسم الأول</h2>
     <ul class="next">
+      <li class="done"><span class="ver">v1.5</span><span class="what"><b>كتابة الـ <span class="en">Story</span> مع الذكاء الاصطناعي وقائمة مراجعة</b><span>صدر الأحد 22 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.4</span><span class="what"><b>تشريح الـ <span class="en">User Story</span> وقالب جاهز</b><span>صدر الأربعاء 18 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.3</span><span class="what"><b>رسالة الـ <span class="en">CEO</span> وتنظيف الـ <span class="en">backlog</span></b><span>صدر الأربعاء 18 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.2</span><span class="what"><b>القرار الأول: الولاء أم الدفع؟ دافع عن اختيارك</b><span>صدر الأربعاء 18 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.1.1</span><span class="what"><b>رابط التقدّم: أكمل من أي جهاز</b><span>صدر الأحد 8 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.1</span><span class="what"><b>بنّاء الـ <span class="en">Problem Statement</span> وأمر التحليل بالذكاء الاصطناعي</b><span>صدر الأحد 8 نوفمبر ✓</span></span></li>
-      <li><span class="ver">v1.5</span><span class="what"><b>كتابة الـ <span class="en">Story</span> مع الذكاء الاصطناعي وقائمة مراجعة</b><span>الأحد 22 نوفمبر</span></span></li>
       <li><span class="ver">v1.6</span><span class="what"><b>حاسبة <span class="en">RICE</span> ومخطط سعة الـ <span class="en">sprint</span></b><span>الأربعاء 25 نوفمبر</span></span></li>
       <li><span class="ver">v1.7</span><span class="what"><b>سجل القرارات، رسالة الأزمة، متتبع الأثر وقالب الـ <span class="en">Retro</span></b><span>الأحد 29 نوفمبر</span></span></li>
       <li><span class="ver">v1.8</span><span class="what"><b>مراجعة التصميم بإطار <span class="en">SURE</span></b><span>الأربعاء 2 ديسمبر</span></span></li>
@@ -568,6 +639,8 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
   <section aria-labelledby="log">
     <h2 id="log">سجل الإصدارات</h2>
     <dl class="log">
+      <dt>v1.5</dt>
+      <dd>الأحد 22 نوفمبر 2026: أمر كتابة الـ <span class="en">Story</span> بالذكاء الاصطناعي، تمرين الحالات التي نسيها، قالب الـ <span class="en">edge cases</span>، وقائمة مراجعة من 10 نقاط.</dd>
       <dt>v1.4</dt>
       <dd>الأربعاء 18 نوفمبر 2026: تشريح الـ <span class="en">User Story</span>، علامات الـ <span class="en">backlog</span> المكركب، وقالب جاهز بالإنجليزي.</dd>
       <dt>v1.3</dt>
@@ -965,6 +1038,55 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
   var ub = document.getElementById('usCopy'); ub.addEventListener('click', function () { copy(usText(), ub, 'انسخ الـ User Story'); once('exercise-1.1-story-copied', 'User story copied'); });
 })();
 
+</script>
+
+<script>
+// v1.5: AI story prompt, missed cases, edge-case builder, review checklist
+(function () {
+  function once(path, title) {
+    try { var k = 'akl-gc-' + path; if (localStorage.getItem(k)) return;
+      if (window.goatcounter && window.goatcounter.count) { window.goatcounter.count({ path: path, title: title, event: true }); localStorage.setItem(k, '1'); } } catch (e) {}
+  }
+  function copy(txt, btn, label) {
+    function done() { btn.textContent = 'تم النسخ ✓'; setTimeout(function () { btn.textContent = label; }, 1800); }
+    try { navigator.clipboard.writeText(txt).then(done, function () { btn.textContent = 'انسخ يدوياً'; }); } catch (e) { btn.textContent = 'انسخ يدوياً'; }
+  }
+  function val(id) { return document.getElementById(id).value.trim(); }
+  function promptText() {
+    var f = val('aiFeat') || 'الدفع بـ STC Pay عند إتمام الطلب';
+    return 'أنت Product Owner في تطبيق توصيل طعام في السعودية. اكتب user story بالإنجليزي للميزة دي: ' + f + '.\n\n' +
+      'المطلوب:\n' +
+      '1) عنوان بصيغة US-[MODULE]-[NUM]: وجملة تقول هنبني إيه.\n' +
+      '2) As a / I want / so that، والـ so that تكون قيمة حقيقية للمستخدم.\n' +
+      '3) Acceptance criteria بصيغة Given / When / Then: حالة النجاح، وبعدها حالة لكل سؤال من دول:\n' +
+      '   - لو المدخلات غلط أو ناقصة؟\n' +
+      '   - لو سيستم خارجي اتأخر أو وقع (بوابة الدفع، الـ callback، خدمة تانية)؟\n' +
+      '   - لو المستخدم عمل حاجة غير متوقعة (رجع، لغى، كود خصم، قيمة 0)؟\n' +
+      '4) لو فيه فلوس، وضّح العميل هيعرف إزاي اتخصم منه ولا لأ.\n' +
+      '5) في الآخر: اكتب أي رقم أو قاعدة افترضتها من عندك، والأسئلة اللي محتاج الفريق يجاوب عليها.';
+  }
+  var EC = [['ec1g', 'ec1w', 'ec1t'], ['ec2g', 'ec2w', 'ec2t'], ['ec3g', 'ec3w', 'ec3t']];
+  function ecText() {
+    return EC.map(function (r, i) {
+      return 'AC ' + (i + 2) + '\nGiven ' + (val(r[0]) || '…') + '\nWhen ' + (val(r[1]) || '…') + '\nThen ' + (val(r[2]) || '…');
+    }).join('\n\n');
+  }
+  function refresh() {
+    document.getElementById('aiStoryPrompt').textContent = promptText();
+    document.getElementById('ecOut').textContent = ecText();
+    var n = 0; for (var i = 1; i <= 10; i++) if (document.getElementById('rv' + i).checked) n++;
+    document.getElementById('rvNote').textContent = n === 0 ? 'جرّبها على مسودة الـ AI فوق: كام نقطة فيها؟' : n < 7 ? n + ' من 10. الـ story دي لسه مش جاهزة للـ refinement.' : n < 10 ? n + ' من 10. قريبة، كمّل الناقص قبل الـ refinement.' : '10 من 10. جاهزة تدخل الـ refinement.';
+    if (n >= 10) once('exercise-1.2-checklist-complete', 'Exercise 1.2 checklist complete');
+  }
+  ['aiFeat'].concat([].concat.apply([], EC)).forEach(function (id) { document.getElementById(id).addEventListener('input', refresh); });
+  for (var i = 1; i <= 10; i++) document.getElementById('rv' + i).addEventListener('change', function () { refresh(); once('exercise-1.2-checklist-start', 'Exercise 1.2 checklist started'); });
+  document.getElementById('aiMissed').addEventListener('input', function () { once('exercise-1.2-start', 'Exercise 1.2 started'); });
+  var rb = document.querySelector('[data-reveal="aiMissedAns"]');
+  if (rb) rb.addEventListener('click', function () { once('exercise-1.2-complete', 'Exercise 1.2 answer revealed'); });
+  var pb = document.getElementById('aiStoryCopy'); pb.addEventListener('click', function () { copy(promptText(), pb, 'انسخ الأمر'); once('exercise-1.2-prompt-copied', 'Story prompt copied'); });
+  var eb = document.getElementById('ecCopy'); eb.addEventListener('click', function () { copy(ecText(), eb, 'انسخ الـ Edge cases'); once('exercise-1.2-edge-copied', 'Edge cases copied'); });
+  refresh();
+})();
 </script>
 
 </body>
