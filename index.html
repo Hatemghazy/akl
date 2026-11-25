@@ -259,6 +259,22 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
 .parts-ar { margin: 0; padding-inline-start: 20px; display: flex; flex-direction: column; gap: 6px; }
 .builder[dir="ltr"] label { text-align: left; }
 .reveal[hidden] { display: none; }
+.rice-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.rice-grid label, .cap-grid label { display: flex; flex-direction: column; gap: 4px; font-size: .82rem; font-weight: 600; color: var(--muted); }
+.rice-grid input, .rice-grid select, .cap-grid input, .rice-name { font: inherit; font-size: .95rem; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; min-width: 0; }
+.rice-name { font-weight: 600; width: 100%; box-sizing: border-box; }
+.rice-score { display: flex; justify-content: space-between; align-items: baseline; font-size: .92rem; }
+.rice-score .mono { font-size: 1.15rem; font-weight: 600; color: var(--accent); }
+.rank { margin: 0; padding-inline-start: 22px; display: flex; flex-direction: column; gap: 4px; }
+.cap-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.cap-item { display: grid; grid-template-columns: auto 1fr 5.5em; gap: 10px; align-items: center; font-size: .95rem; }
+.cap-item input[type="number"] { font: inherit; font-size: .95rem; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; min-width: 0; }
+.cap-item input[type="checkbox"] { accent-color: var(--accent); }
+.meter { height: 12px; border-radius: 6px; background: var(--sunk); overflow: hidden; }
+.meter > span { display: block; height: 100%; background: var(--dlv); transition: width .2s; }
+.meter.over > span { background: var(--bug); }
+.soon { align-self: stretch; width: 100%; box-sizing: border-box; border: 1px dashed var(--line); border-radius: var(--r); padding: 12px 14px; color: var(--muted); font-size: .92rem; }
+@media (max-width: 520px) { .rice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -271,9 +287,9 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
 
   <header>
     <div class="control">
-      <span class="stamp">v1.5</span>
+      <span class="stamp">v1.6</span>
       <span class="tag">الموسم الأول</span>
-      <span class="tag"><span class="en">Sprint 1</span> · المنصة المشتعلة</span>
+      <span class="tag"><span class="en">Sprint 1</span> · الأزمة</span>
     </div>
     <h1>دليل الـ <span class="en">PO</span> في <span class="en">Akl</span></h1>
     <p class="lede">من اليوم أنت الـ <span class="en">Product Owner</span> لتطبيق Akl، تطبيق توصيل طعام في السعودية. كل حلقة على LinkedIn تضيف هنا تمريناً أو قالباً جديداً، وتقدّمك يُحفظ تلقائياً، ويمكنك أخذه معك إلى أي جهاز عبر <a href="#save">رابط تقدّمك</a>.</p>
@@ -281,9 +297,9 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
 
   <div class="new" role="note">
     <span class="dot" aria-hidden="true"></span>
-    <strong>جديد في v1.5: اكتب الـ <span class="en">Story</span> مع الـ <span class="en">AI</span>، وقائمة مراجعة من 10 نقاط</strong>
-    <span>الـ <span class="en">AI</span> نسي 3 حالات كانت هتوقّع الدفع. لاقيها قبل ما تشوف إجابتنا. <a href="#aistory">ابدأ التمرين</a></span>
-    <span>ولو فاتتك: <a href="#story">v1.4 تشريح الـ <span class="en">User Story</span></a>، و<a href="#ceo">v1.3 رسالة الـ <span class="en">CEO</span></a>.</span>
+    <strong>جديد في v1.6: حاسبة <span class="en">RICE</span>، مخطط سعة الـ <span class="en">sprint</span>، وكارت القرار</strong>
+    <span>الدفع بالكارت بيفشل 20% في نص الـ <span class="en">sprint</span>. احسبها بالأرقام قبل ما تقرّر. <a href="#rice">ابدأ التمرين</a></span>
+    <span>ولو فاتتك: <a href="#aistory">v1.5 الـ <span class="en">Story</span> مع الـ <span class="en">AI</span></a>، و<a href="#story">v1.4 تشريح الـ <span class="en">User Story</span></a>.</span>
   </div>
 
   <div class="restored" id="restoredNote" role="status" hidden>تم استرجاع تقدّمك من الرابط. أكمل من حيث توقفت.</div>
@@ -620,17 +636,105 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
     <a class="savelink" href="#save" data-save>احفظ تقدّمي وأكمل من جهاز آخر</a>
   </section>
 
+  <section id="rice" aria-labelledby="ex8">
+    <div>
+      <span class="eyebrow">تمرين 1.3 · v1.6</span>
+      <h2 id="ex8">الأزمة: الدفع بيفشل في نص الـ <span class="en">sprint</span></h2>
+    </div>
+    <p class="muted">يوم 6 من الـ <span class="en">sprint</span>. بوابة الدفع غيّرت الـ <span class="en">API</span> من غير ما تبلغ حد، و20% من الدفع بالكارت بقى بيفشل. الإصلاح محتاج يومين، ومعاك <span class="en">Backend developer</span> واحد بس يعرف كود الدفع. ولو اشتغل على الإصلاح، <span class="en">Saved Payments</span>، الميزة اللي الـ <span class="en">CEO</span> مستنيها، مش هتلحق الـ <span class="en">sprint</span>.</p>
+
+    <h3>1) كارت القرار</h3>
+    <p class="muted">اختار، واكتب دفاعك. ده نفس سؤال الـ <span class="en">poll</span> على LinkedIn.</p>
+    <div class="choices c-gen" role="radiogroup" aria-label="اختيارك">
+      <span><input type="radio" name="dec1" id="dec1a" value="a" data-keep><label for="dec1a">1) نصلح الـ <span class="en">API</span> ونأجل <span class="en">Saved Payments</span></label></span>
+      <span><input type="radio" name="dec1" id="dec1b" value="b" data-keep><label for="dec1b">2) الاتنين بـ <span class="en">overtime</span></label></span>
+      <span><input type="radio" name="dec1" id="dec1c" value="c" data-keep><label for="dec1c">3) نجيب <span class="en">developer</span> من فريق تاني</label></span>
+    </div>
+    <label class="field">دافع عن اختيارك في 3 سطور
+      <textarea id="dec1why" rows="4" data-keep placeholder="إيه الرقم اللي بتستند عليه؟ مين هيدفع تمن اختيارك؟ وهتقول إيه للـ CEO؟"></textarea>
+    </label>
+    <p class="soon">🔒 إجابتنا تفتح هنا الأحد 29 نوفمبر مع v1.7. لحد ساعتها، جرّب الحاسبتين تحت وشوف الأرقام بتقول إيه.</p>
+
+    <h3>2) حاسبة <span class="en">RICE</span></h3>
+    <p class="mono" dir="ltr" style="text-align:left">RICE = Reach × Impact × Confidence ÷ Effort</p>
+    <p class="muted">الـ <span class="en">Reach</span> هنا عدد الطلبات اللي بتتأثر في اليوم، والـ <span class="en">Effort</span> بأيام شغل developer واحد. الأرقام من المحاكاة، غيّرها وشوف الترتيب بيتغيّر إزاي.</p>
+    <div class="builder" id="riceRows">
+      <fieldset class="ticket"><input class="rice-name" id="rn1" data-keep aria-label="البند 1" value="إصلاح الـ API بتاع بوابة الدفع">
+        <div class="rice-grid">
+          <label>Reach<input type="number" min="0" id="rr1" data-keep value="980"></label>
+          <label>Impact<select id="ri1" data-keep><option value="3" selected>3 ضخم</option><option value="2">2 عالي</option><option value="1">1 متوسط</option><option value="0.5">0.5 قليل</option><option value="0.25">0.25 ضعيف</option></select></label>
+          <label>Confidence<select id="rc1" data-keep><option value="1" selected>100%</option><option value="0.8">80%</option><option value="0.5">50%</option></select></label>
+          <label>Effort<input type="number" min="0.5" step="0.5" id="re1" data-keep value="2"></label>
+        </div>
+        <div class="rice-score"><span>الـ score</span><span class="mono" id="rs1">0</span></div>
+      </fieldset>
+      <fieldset class="ticket"><input class="rice-name" id="rn2" data-keep aria-label="البند 2" value="Saved Payments (حفظ الكارت)">
+        <div class="rice-grid">
+          <label>Reach<input type="number" min="0" id="rr2" data-keep value="2500"></label>
+          <label>Impact<select id="ri2" data-keep><option value="3">3 ضخم</option><option value="2">2 عالي</option><option value="1" selected>1 متوسط</option><option value="0.5">0.5 قليل</option><option value="0.25">0.25 ضعيف</option></select></label>
+          <label>Confidence<select id="rc2" data-keep><option value="1">100%</option><option value="0.8" selected>80%</option><option value="0.5">50%</option></select></label>
+          <label>Effort<input type="number" min="0.5" step="0.5" id="re2" data-keep value="4"></label>
+        </div>
+        <div class="rice-score"><span>الـ score</span><span class="mono" id="rs2">0</span></div>
+      </fieldset>
+      <fieldset class="ticket"><input class="rice-name" id="rn3" data-keep aria-label="البند 3" value="خريطة تتبع المندوب">
+        <div class="rice-grid">
+          <label>Reach<input type="number" min="0" id="rr3" data-keep value="3000"></label>
+          <label>Impact<select id="ri3" data-keep><option value="3">3 ضخم</option><option value="2">2 عالي</option><option value="1" selected>1 متوسط</option><option value="0.5">0.5 قليل</option><option value="0.25">0.25 ضعيف</option></select></label>
+          <label>Confidence<select id="rc3" data-keep><option value="1">100%</option><option value="0.8">80%</option><option value="0.5" selected>50%</option></select></label>
+          <label>Effort<input type="number" min="0.5" step="0.5" id="re3" data-keep value="8"></label>
+        </div>
+        <div class="rice-score"><span>الـ score</span><span class="mono" id="rs3">0</span></div>
+      </fieldset>
+      <fieldset class="ticket"><input class="rice-name" id="rn4" data-keep aria-label="البند 4" placeholder="بند من الـ backlog بتاعك">
+        <div class="rice-grid">
+          <label>Reach<input type="number" min="0" id="rr4" data-keep placeholder="0"></label>
+          <label>Impact<select id="ri4" data-keep><option value="3">3 ضخم</option><option value="2">2 عالي</option><option value="1" selected>1 متوسط</option><option value="0.5">0.5 قليل</option><option value="0.25">0.25 ضعيف</option></select></label>
+          <label>Confidence<select id="rc4" data-keep><option value="1">100%</option><option value="0.8" selected>80%</option><option value="0.5">50%</option></select></label>
+          <label>Effort<input type="number" min="0.5" step="0.5" id="re4" data-keep placeholder="1"></label>
+        </div>
+        <div class="rice-score"><span>الـ score</span><span class="mono" id="rs4">–</span></div>
+      </fieldset>
+    </div>
+    <div class="tally">
+      <h3>الترتيب بالأرقام</h3>
+      <ol class="rank" id="riceRank"></ol>
+      <p class="muted" style="font-size:.88rem">الـ <span class="en">RICE</span> بيرتّب، مش بيقرّر. لو الـ <span class="en">Confidence</span> عندك 50%، اسأل نفسك: إيه اللي ناقصني عشان أبقى متأكد؟</p>
+    </div>
+    <pre class="prompt" id="riceOut" dir="ltr"></pre>
+    <button type="button" class="primary" id="riceCopy">انسخ الترتيب</button>
+
+    <h3>3) مخطط سعة الـ <span class="en">sprint</span></h3>
+    <p class="muted">فاضل كام يوم شغل فعلاً؟ الـ <span class="en">focus</span> هو النسبة الحقيقية من اليوم اللي بتروح للشغل ده، بعد الاجتماعات والـ <span class="en">support</span>.</p>
+    <div class="cap-grid">
+      <label><span>عدد الـ <span class="en">developers</span></span><input type="number" min="0" step="1" id="cpDevs" data-keep value="1"></label>
+      <label><span>أيام فاضلة</span><input type="number" min="0" step="1" id="cpDays" data-keep value="4"></label>
+      <label><span><span class="en">Focus</span> %</span><input type="number" min="0" max="100" step="5" id="cpFocus" data-keep value="80"></label>
+    </div>
+    <div class="tally">
+      <h3>الشغل اللي في الـ <span class="en">sprint</span> (أيام)</h3>
+      <div class="cap-item"><input type="checkbox" id="cpI1" data-keep checked><label for="cpI1">إصلاح الـ <span class="en">API</span> بتاع بوابة الدفع</label><input type="number" min="0" step="0.5" id="cpD1" data-keep value="2" aria-label="أيام إصلاح الـ API"></div>
+      <div class="cap-item"><input type="checkbox" id="cpI2" data-keep checked><label for="cpI2">الباقي من <span class="en">Saved Payments</span></label><input type="number" min="0" step="0.5" id="cpD2" data-keep value="3" aria-label="أيام Saved Payments"></div>
+      <div class="cap-item"><input type="checkbox" id="cpI3" data-keep checked><label for="cpI3"><span class="en">Bugs</span> و<span class="en">support</span> يومي</label><input type="number" min="0" step="0.5" id="cpD3" data-keep value="0.5" aria-label="أيام البجز"></div>
+      <div class="cap-item"><input type="checkbox" id="cpI4" data-keep><label for="cpI4">مراجعة كود الـ <span class="en">developer</span> الجديد (لو استلفت حد)</label><input type="number" min="0" step="0.5" id="cpD4" data-keep value="1" aria-label="أيام مراجعة الكود"></div>
+      <div class="meter" id="cpMeter" role="img" aria-label=""><span id="cpBar"></span></div>
+      <p id="cpNote" style="font-size:.95rem"></p>
+    </div>
+    <p class="muted" style="font-size:.88rem">الأرقام دي من المحاكاة. في شغلك، الـ <span class="en">Tech Lead</span> هو اللي يقدّر الأيام، وإنت اللي تقرّر إيه يخرج من الـ <span class="en">sprint</span>.</p>
+    <a class="savelink" href="#save" data-save>احفظ تقدّمي وأكمل من جهاز آخر</a>
+  </section>
+
   <section aria-labelledby="coming">
     <h2 id="coming">ما القادم في الموسم الأول</h2>
     <ul class="next">
+      <li class="done"><span class="ver">v1.6</span><span class="what"><b>حاسبة <span class="en">RICE</span>، مخطط سعة الـ <span class="en">sprint</span> وكارت القرار</b><span>صدر الأربعاء 25 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.5</span><span class="what"><b>كتابة الـ <span class="en">Story</span> مع الذكاء الاصطناعي وقائمة مراجعة</b><span>صدر الأحد 22 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.4</span><span class="what"><b>تشريح الـ <span class="en">User Story</span> وقالب جاهز</b><span>صدر الأربعاء 18 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.3</span><span class="what"><b>رسالة الـ <span class="en">CEO</span> وتنظيف الـ <span class="en">backlog</span></b><span>صدر الأربعاء 18 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.2</span><span class="what"><b>القرار الأول: الولاء أم الدفع؟ دافع عن اختيارك</b><span>صدر الأربعاء 18 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.1.1</span><span class="what"><b>رابط التقدّم: أكمل من أي جهاز</b><span>صدر الأحد 8 نوفمبر ✓</span></span></li>
       <li class="done"><span class="ver">v1.1</span><span class="what"><b>بنّاء الـ <span class="en">Problem Statement</span> وأمر التحليل بالذكاء الاصطناعي</b><span>صدر الأحد 8 نوفمبر ✓</span></span></li>
-      <li><span class="ver">v1.6</span><span class="what"><b>حاسبة <span class="en">RICE</span> ومخطط سعة الـ <span class="en">sprint</span></b><span>الأربعاء 25 نوفمبر</span></span></li>
-      <li><span class="ver">v1.7</span><span class="what"><b>سجل القرارات، رسالة الأزمة، متتبع الأثر وقالب الـ <span class="en">Retro</span></b><span>الأحد 29 نوفمبر</span></span></li>
+      <li><span class="ver">v1.7</span><span class="what"><b>إجابة قرار الأزمة، سجل القرارات، رسالة الأزمة، متتبع الأثر وقالب الـ <span class="en">Retro</span></b><span>الأحد 29 نوفمبر</span></span></li>
       <li><span class="ver">v1.8</span><span class="what"><b>مراجعة التصميم بإطار <span class="en">SURE</span></b><span>الأربعاء 2 ديسمبر</span></span></li>
       <li class="major"><span class="ver">v2.0</span><span class="what"><b>نهاية الموسم الأول: ملخص عملك والتسجيل للموسم الثاني</b><span>الأحد 6 ديسمبر</span></span></li>
     </ul>
@@ -639,6 +743,8 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
   <section aria-labelledby="log">
     <h2 id="log">سجل الإصدارات</h2>
     <dl class="log">
+      <dt>v1.6</dt>
+      <dd>الأربعاء 25 نوفمبر 2026: كارت قرار الأزمة، حاسبة <span class="en">RICE</span>، ومخطط سعة الـ <span class="en">sprint</span>.</dd>
       <dt>v1.5</dt>
       <dd>الأحد 22 نوفمبر 2026: أمر كتابة الـ <span class="en">Story</span> بالذكاء الاصطناعي، تمرين الحالات التي نسيها، قالب الـ <span class="en">edge cases</span>، وقائمة مراجعة من 10 نقاط.</dd>
       <dt>v1.4</dt>
@@ -734,7 +840,7 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
       var urg = typeof d.u === 'string' && ORDER.indexOf(d.u) > -1 ? d.u : '';
       localStorage.setItem(KEY, JSON.stringify({ cats: cats, urgent: urg }));
       if (d.ps && typeof d.ps === 'object') { var o = {}; ['psUser','psNeed','psWhy','psBut','psImpact'].forEach(function (k, i) { if (typeof d.ps[i] === 'string') o[k] = d.ps[i].slice(0, 400); }); localStorage.setItem('akl-playbook-ps', JSON.stringify(o)); }
-      if (d.m && typeof d.m === 'object') { var mo = {}; Object.keys(d.m).slice(0, 60).forEach(function (k) { var v = d.m[k]; if (typeof v === 'string') mo[k] = v.slice(0, 1200); else if (typeof v === 'boolean') mo[k] = v; }); localStorage.setItem('akl-playbook-more', JSON.stringify(mo)); }
+      if (d.m && typeof d.m === 'object') { var mo = {}; Object.keys(d.m).slice(0, 150).forEach(function (k) { var v = d.m[k]; if (typeof v === 'string') mo[k] = v.slice(0, 1200); else if (typeof v === 'boolean') mo[k] = v; }); localStorage.setItem('akl-playbook-more', JSON.stringify(mo)); }
       document.getElementById('restoredNote').hidden = false;
       try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'progress-link-restored', title: 'Progress link restored', event: true }); } catch (e) {}
     } catch (e) {}
@@ -973,7 +1079,7 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
   [].forEach.call(fields, function (el) {
     var k = el.type === 'radio' ? el.name : el.id;
     if (el.type === 'radio') { if (store[k] === el.value) el.checked = true; }
-    else if (el.type === 'checkbox') { if (store[k] === true) el.checked = true; }
+    else if (el.type === 'checkbox') { if (typeof store[k] === 'boolean') el.checked = store[k]; }
     else if (typeof store[k] === 'string') el.value = store[k];
     var ev = (el.type === 'radio' || el.type === 'checkbox') ? 'change' : 'input';
     el.addEventListener(ev, function () {
@@ -1085,6 +1191,63 @@ textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; 
   if (rb) rb.addEventListener('click', function () { once('exercise-1.2-complete', 'Exercise 1.2 answer revealed'); });
   var pb = document.getElementById('aiStoryCopy'); pb.addEventListener('click', function () { copy(promptText(), pb, 'انسخ الأمر'); once('exercise-1.2-prompt-copied', 'Story prompt copied'); });
   var eb = document.getElementById('ecCopy'); eb.addEventListener('click', function () { copy(ecText(), eb, 'انسخ الـ Edge cases'); once('exercise-1.2-edge-copied', 'Edge cases copied'); });
+  refresh();
+})();
+</script>
+
+<script>
+// v1.6: crisis decision card, RICE calculator, sprint capacity planner
+(function () {
+  function once(path, title) {
+    try { var k = 'akl-gc-' + path; if (localStorage.getItem(k)) return;
+      if (window.goatcounter && window.goatcounter.count) { window.goatcounter.count({ path: path, title: title, event: true }); localStorage.setItem(k, '1'); } } catch (e) {}
+  }
+  function copy(txt, btn, label) {
+    function done() { btn.textContent = 'تم النسخ ✓'; setTimeout(function () { btn.textContent = label; }, 1800); }
+    try { navigator.clipboard.writeText(txt).then(done, function () { btn.textContent = 'انسخ يدوياً'; }); } catch (e) { btn.textContent = 'انسخ يدوياً'; }
+  }
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = parseFloat($(id).value); return isFinite(v) ? v : NaN; }
+  function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
+  function rows() {
+    var out = [];
+    for (var i = 1; i <= 4; i++) {
+      var name = $('rn' + i).value.trim(), r = num('rr' + i), im = num('ri' + i), c = num('rc' + i), e = num('re' + i);
+      var ok = name && r >= 0 && e > 0 && isFinite(im) && isFinite(c);
+      var sc = ok ? r * im * c / e : NaN;
+      $('rs' + i).textContent = ok ? fmt(sc) : '–';
+      if (ok) out.push({ name: name, r: r, i: im, c: c, e: e, s: sc });
+    }
+    return out.sort(function (a, b) { return b.s - a.s; });
+  }
+  function riceText(list) {
+    return 'RICE ranking (Reach x Impact x Confidence / Effort)\n\n' + list.map(function (x, k) {
+      return (k + 1) + ') ' + x.name + ': ' + fmt(x.s) + '  [R ' + fmt(x.r) + ' · I ' + x.i + ' · C ' + Math.round(x.c * 100) + '% · E ' + x.e + 'd]';
+    }).join('\n');
+  }
+  function refresh() {
+    var list = rows(), rank = $('riceRank'); rank.textContent = '';
+    list.forEach(function (x) { var li = document.createElement('li'); var b = document.createElement('b'); b.textContent = x.name; li.appendChild(b); li.appendChild(document.createTextNode(' · ')); var m = document.createElement('span'); m.className = 'mono'; m.textContent = fmt(x.s); li.appendChild(m); rank.appendChild(li); });
+    $('riceOut').textContent = riceText(list);
+    // capacity
+    var devs = Math.max(0, num('cpDevs') || 0), days = Math.max(0, num('cpDays') || 0), f = Math.min(100, Math.max(0, num('cpFocus') || 0)) / 100;
+    var cap = devs * days * f, load = 0;
+    for (var i = 1; i <= 4; i++) if ($('cpI' + i).checked) load += Math.max(0, num('cpD' + i) || 0);
+    var pct = cap > 0 ? Math.min(100, load / cap * 100) : (load > 0 ? 100 : 0);
+    var over = load > cap + 1e-9, m = $('cpMeter');
+    $('cpBar').style.width = pct + '%'; m.className = 'meter' + (over ? ' over' : '');
+    var r1 = Math.round(load * 10) / 10, c1 = Math.round(cap * 10) / 10, d = Math.round((load - cap) * 10) / 10;
+    var note = over ? 'الحمل ' + r1 + ' يوم، والمتاح ' + c1 + ' بس. ناقصك ' + d + ' يوم: يا تشيل شغل من الـ sprint، يا تزوّد السعة وتعرف تمنها.' : 'الحمل ' + r1 + ' يوم من ' + c1 + ' متاحين. فاضل ' + Math.round((cap - load) * 10) / 10 + ' يوم احتياطي.';
+    $('cpNote').textContent = note; m.setAttribute('aria-label', note);
+  }
+  var ids = [];
+  for (var i = 1; i <= 4; i++) ids.push('rn' + i, 'rr' + i, 'ri' + i, 'rc' + i, 're' + i);
+  ids.forEach(function (id) { var el = $(id); el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', function () { refresh(); once('exercise-1.3-rice-start', 'Exercise 1.3 RICE edited'); }); });
+  ['cpDevs', 'cpDays', 'cpFocus', 'cpD1', 'cpD2', 'cpD3', 'cpD4'].forEach(function (id) { $(id).addEventListener('input', function () { refresh(); once('exercise-1.3-capacity-start', 'Exercise 1.3 capacity edited'); }); });
+  for (var j = 1; j <= 4; j++) $('cpI' + j).addEventListener('change', function () { refresh(); once('exercise-1.3-capacity-start', 'Exercise 1.3 capacity edited'); });
+  [].forEach.call(document.querySelectorAll('input[name="dec1"]'), function (el) { el.addEventListener('change', function () { once('exercise-1.3-decision', 'Exercise 1.3 decision picked'); }); });
+  $('dec1why').addEventListener('input', function () { once('exercise-1.3-defended', 'Exercise 1.3 decision defended'); });
+  var rb = $('riceCopy'); rb.addEventListener('click', function () { copy(riceText(rows()), rb, 'انسخ الترتيب'); once('exercise-1.3-rice-copied', 'RICE ranking copied'); });
   refresh();
 })();
 </script>
